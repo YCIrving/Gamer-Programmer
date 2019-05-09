@@ -1,1 +1,1 @@
-Algorithms
+Computer Graphics
