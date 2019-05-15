@@ -7,4 +7,6 @@
 * [Computer E-books download](http://freecomputerbooks.com/)
 * [Google style guide](https://google.github.io/styleguide/)
 * [Google cpp style guide CN](https://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/)
+* [A General Introduction to Electronic Games in Peking University](http://sims.pku.edu.cn/bkxjTeaching/edu/pku/stu/teaching/bkxj/jpf/courseBK/getCourseDetail.do?course_seq_no=bkkc201700329482&kclx=BK)
+* 
 
