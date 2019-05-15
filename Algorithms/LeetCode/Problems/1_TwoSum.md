@@ -95,7 +95,7 @@ public:
         vector<int> ret(2);
         // 第一轮循环，加入键值
         for(int i=0; i<nums.size(); i++) hash_map[nums[i]] = i;
-		// 第二轮循环，验证是否存在
+        // 第二轮循环，验证是否存在
         // 十分重要的一点在于，每个数字只能用一次的判断
         for (int i=0; i<nums.size(); i++) {
             if(hash_map.find(target-nums[i])!=hash_map.end() && hash_map[target-nums[i]] != i) {
