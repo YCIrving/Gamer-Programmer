@@ -21,8 +21,6 @@ return [0, 1].
 
 ### Idea: 
 
-使用两个变量进行遍历，直到满足条件为止
-
 ### Code: 
 
 ```c++
@@ -45,24 +43,6 @@ public:
 ```
 
 ### Rethinking:
-
-- 对vector赋值的两种情况：
-
-  - 动态大小的_vector_要使用_push_back()_赋值，而不能直接通过下标赋值
-
-  - 如果希望通过下标赋值，需要在申请时指定_vector_的大小：
-
-    ```c++
-    vector<int> vec(100) // 声明一个长度为100的vector
-    ```
-
-- 可以使用：
-
-  ```c++
-   return {}; 
-  ```
-
-  来返回一个空_vector_。同理，也可以使用_{1, 100}_来表示一个长度为2的_vector_，但这种使用类似_list_的结构来表示_vector_的方法，只有在c++11中才可以使用。
 
 ### Complexity Analysis: 
 

@@ -22,7 +22,7 @@ return [0, 1].
 
 
 ### Idea: 
-使用两个变量进行遍历，直到满足条件为止
+使用两个变量进行遍历，直到满足条件为止。
 
 
 ### Code: 
@@ -126,20 +126,20 @@ public:
 
 - 哈希表的STL实现主要包括两类：
 
-  - _map_: 内部有序，但维护需要花费$O(logn)$的时间
+  - _map_: 内部有序，但维护需要花费$O(logn)$的时间：
 
     ```c++
     map<int, int> my_map; //声明一个map
     ```
 
-  - _unordered_map_: 内部无序，增删改查均为$O(1)$时间（最坏为$O(n)$），可以看做是哈希表的官方实现
+  - _unordered_map_: 内部无序，增删改查均为$O(1)$时间（最坏为$O(n)$），可以看做是哈希表的官方实现：
 
     ```c++
     // 声明一个哈希表
     unordered_map<int, int> my_unordered_map; 
     ```
 
-  - 二者更多区别可见[GeeksforGeeks](<https://www.geeksforgeeks.org/map-vs-unordered_map-c/>)
+  - 二者更多区别可见[Map-vs-Unordered_map by GeeksforGeeks](<https://www.geeksforgeeks.org/map-vs-unordered_map-c/>)
 
 - 对哈希表的基本操作包括增删改查和遍历：
 
@@ -166,8 +166,11 @@ public:
   for (itr = my_map.begin(); itr != my_map.end(); itr++) { 
       cout << itr->first << "  " << itr->second << endl; 
   } 
+  
+// 清空哈希表
+  my_map.clear();
   ```
-
+  
   
 
 ### Complexity Analysis: 
@@ -180,6 +183,8 @@ public:
 > Runtime: 4 ms, faster than 99.99% of C++ online submissions for Two Sum.
 >
 > Memory Usage: 10.3 MB, less than 42.46% of C++ online submissions for Two Sum.
+
+
 
 ## Solution 3: One-pass Hash Table
 
