@@ -19,7 +19,11 @@
   
     ![Source Tree Pull](../assets/Source Tree Pull.png)
   
-  * 推送时，确保已暂存文件中只存在自己修改过的文件，类似于 `git add` 命令
+  * 推送时，确保已暂存文件中只存在自己修改过的文件，类似于 `git add` 命令，同时在下方填写注释，可以勾选立即推送，这样可以点击后直接提交，否则会出现本地仓库超前远端仓库的情形，也需要后期再次进行push
+  
+    ![Source Tree Pull](../assets/Source Tree Push.png)
+  
+    
   
 * Unity布局：
 	![Unity Layout](../assets/Unity Layout.png)
