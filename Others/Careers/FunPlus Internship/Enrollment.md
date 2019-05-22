@@ -12,7 +12,7 @@
 * 入职后的第一步
   * 公司会给一份入职须知，按照上面流程走完即可完成大部分工作
   
-    ![Funplus Enrollment](../assets/Funplus Enrollments.jpg)
+    ![Funplus Enrollment](assets/Funplus Enrollments.jpg)
   
   * 企业邮箱：
   
