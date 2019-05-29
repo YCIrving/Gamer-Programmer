@@ -31,6 +31,8 @@
 * Unity布局：
 	![Unity Layout](assets/Unity Layout.png)
 	
+	注意在WIndows中，将Console Enhanced调出来，并与原来的Console放置在一起
+	
 * App Store安装：Office 365、QQ、微信、钉钉、网易云音乐
 
 * 命令行安装：oh my zsh `sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"`
