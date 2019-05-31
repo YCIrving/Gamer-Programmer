@@ -78,7 +78,7 @@
    private Ray _ray;
    private Vector3 hitPoint;
    public void OnTouchDown(Ray ray)
-{
+   {
      _ray = ray;
      RaycastHit hit;
      // hit是击中的物体，判断是否是可以被拾取的物体
@@ -97,7 +97,7 @@
        MouseClickedObject = null;
      }
    }
-  
+    
    // 将射线可视化
    private void OnDrawGizmos()
    {
