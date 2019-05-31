@@ -6,11 +6,13 @@
 
 ---
 
-# Day1-2: 2019.05.20 - 2019.05.21
+# Day1-2: 05.20 - 05.21
 
 入职并配置环境
 
-# Day 3: 2019.05.22
+
+
+# Day 3: 05.22
 
 **今天主要的成绩是熟悉了开发环境，领到了任务，并且完成了提交。**
 
@@ -62,4 +64,127 @@
 
 
 
+# Day4-6: 05.24, 05.27 - 05.28
+
+## Unity中物体的选取
+
+理解鼠标选取和拾取物体的逻辑
+
+1. 思想为：鼠标点击时，从观察摄像机中发射一条射线，通过判断射线接触到的模型是否为可以被拾取的物体，来确定最终的结果
+
+2. 代码如下：
+
+   ```c#
+   private Ray _ray;
+   private Vector3 hitPoint;
+   public void OnTouchDown(Ray ray)
+{
+     _ray = ray;
+     RaycastHit hit;
+     // hit是击中的物体，判断是否是可以被拾取的物体
+     if (Physics.Raycast(ray, out hit) && 
+         (hit.collider.gameObject.tag == "ObjectCanBePicked"))
+     {
+       
+       // 记录射线击中的位置
+       hitPoint = hit.point;
+       // 对选中物体进行操作
+       MouseClickedObject = Ground.instance.ObjectsList(hit.collider.gameObject);
+     }
+     else
+     {
+       // 没有选中任何物体
+       MouseClickedObject = null;
+     }
+   }
+  
+   // 将射线可视化
+   private void OnDrawGizmos()
+   {
+     Gizmos.color = Color.red;
+     Gizmos.DrawLine(_ray.origin, hitPoint);
+   }
+   ```
    
+3. 设置物体tag：
+
+   ![Unity Pick Up](assets/Unity Pick Up.png)
+
+4.拾取物体逻辑图
+
+```flow
+
+st=>start: 开始框
+
+op=>operation: 处理框
+
+cond=>condition: 判断框(是或否?)
+
+sub1=>subroutine: 子流程
+
+io=>inputoutput: 输入输出框
+
+e=>end: 结束框
+
+st->op->cond
+
+cond(yes)->io->e
+
+cond(no)->sub1(right)->op
+
+```
+## Rider中一些使用技巧
+
+1. 使用`Ctrl+Shift+F`，可以进行跨文件查找
+
+2. 在菜单栏中的View中，勾选Toolbar，可以显示更多功能，其中有一个十分实用的功能：跳回上次代码的位置，应用在查看某个函数的实现后，回到原始位置。快捷键为`Command+减号`和`Command+Shift+减号`，如果鼠标支持侧键，则可以更方便的在代码间跳转。
+
+3. 调试模式中，有时断点打上后会变成灰色。这种情况不用担心，只是说明程序目前不一定会执行到这里
+
+   ![Rider Grey Breakpoint](assets/Rider Grey Breakpoint.png)
+# Day7: 05.27
+
+## 在Scene中进行对象的绑定
+
+首先我们有一个定义在脚本中的场景类，类中有一些成员变量，比如一个`Text`，叫`textForShow`，我们希望通过这个`Text`来直接控制Unity中某个场景中显示的文本，比如UI中的一个信息`ButtonText`，除了在脚本中动态获得这个`GameObject`以外，我们还可以直接在Unity中进行可视化的绑定。方法如下：
+
+1. 找到这个场景对应的`GameObject`，这时如果它绑定了场景脚本，就能够看到它对应的成员；
+
+2. 之后同样在Hierarchy栏中找到希望绑定的UI；
+
+3. 将UI拖动到成员变量之后即可完成绑定；
+
+4. 绑定后，可以在代码中通过对成员变量的修改，直接控制UI界面。
+
+   ![Unity Binding in Unity](assets/Unity Binding in Unity.png)
+
+
+
+## SourceTree 提交前需要先拉取并解决冲突
+
+每次进行提交前，务必进行拉取操作，否则就会使得代码流进行分流，如下图所示。原因在于，提交前，你的代码并不是最新的，所以你提交之后会从旧版本中新增一个分支。
+
+![SourceTree Pull Before Push1](assets/SourceTree Pull Before Push1.png)
+
+
+
+解决方法：选择分叉的点，然后选择"回退"，之后选择软合并即可。
+
+![SourceTree Pull Before Push2](assets/SourceTree Pull Before Push2.png)
+
+![SourceTree Pull Before Push3](assets/SourceTree Pull Before Push3.png)
+
+# Day 8: 05.31
+
+SourceTree理解，提交cs，表格不要自己提交
+
+## Rider中一些使用技巧
+
+1. 使用`Ctrl+T`，搜索文件名，并直接跳转到文件；
+2. 使用`Ctrl+G`，打开跳转菜单，输入行号可以直接跳转到指定行
+
+## 编码经验
+
+1. 数据结构很重要。针对不同的目标，使用不同的数据结构，比如项目中存储不同类型的建筑物，每个建筑物有一个_索引ID_，就比较适合用Dictionary_，_ID_为_Key，而如果用list存储，用下标在list中查找，就会导致后期对ID有一些要求，比如必须跟下标一致等，导致编码繁琐。
+2. 多增少改。如果需要改接口，尽量在原有基础上增加一个新的，而不是直接修改旧的接口。因为旧的接口可能被很多地方使用，而新的接口只需要当前使用，当然如果是1中所说的情况，则最好从本质上解决问题。
+
