@@ -157,3 +157,27 @@ $$I = \int \rho R^{2} dV$$
 
 And note that you can backslash-escape any punctuation characters
 which you wish to be displayed literally, ex.: \`foo\`, \*bar\*, etc.
+
+Here's the sample of flow diagram.
+
+
+```flow
+
+st=>start: 开始框
+
+op=>operation: 处理框
+
+cond=>condition: 判断框(是或否?)
+
+sub1=>subroutine: 子流程
+
+io=>inputoutput: 输入输出框
+
+e=>end: 结束框
+
+st->op->cond
+
+cond(yes)->io->e
+
+cond(no)->sub1(right)->op
+```

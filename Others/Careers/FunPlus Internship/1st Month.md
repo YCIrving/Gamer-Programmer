@@ -1,16 +1,14 @@
 # 第一月：
 
-**时间**：2019.05.20-2019.06.20
+**时间：2019.05.20-2019.06.20**
 
-**目标**：能够独立完成基本的问题解决和开发工作，融入团队
+**目标：能够独立完成基本的问题解决和开发工作，融入团队**
 
 ---
 
 # Day1-2: 05.20 - 05.21
 
 入职并配置环境
-
-
 
 # Day 3: 05.22
 
@@ -112,27 +110,32 @@
 
 4.拾取物体逻辑图
 
+
 ```flow
+st=>start: 点击事件
 
-st=>start: 开始框
+cond1=>condition: 判断被点击物体是否可被拾取
 
-op=>operation: 处理框
+op1=>operation: 选中地面，清空当前选中物体
 
-cond=>condition: 判断框(是或否?)
+cond2=>condition: 判断与当前选中物体是否相同
 
-sub1=>subroutine: 子流程
-
-io=>inputoutput: 输入输出框
+op2=>operation: 选中新物体，更新当前选中物体
 
 e=>end: 结束框
 
-st->op->cond
+st->cond1
 
-cond(yes)->io->e
+cond1(yes)->cond2
 
-cond(no)->sub1(right)->op
+cond1(no)->op1->e
+
+cond2(yes)->op1->e
+
+cond2(no)->op2->e
 
 ```
+
 ## Rider中一些使用技巧
 
 1. 使用`Ctrl+Shift+F`，可以进行跨文件查找
@@ -142,7 +145,7 @@ cond(no)->sub1(right)->op
 3. 调试模式中，有时断点打上后会变成灰色。这种情况不用担心，只是说明程序目前不一定会执行到这里
 
    ![Rider Grey Breakpoint](assets/Rider Grey Breakpoint.png)
-# Day7-8: 05.29-05.30
+# Day7: 05.29
 
 ## 在Scene中进行对象的绑定
 
@@ -174,7 +177,9 @@ cond(no)->sub1(right)->op
 
 ![SourceTree Pull Before Push3](assets/SourceTree Pull Before Push3.png)
 
-# Day 9: 05.31
+# Day 8-9: 05.30 - 05.31
+
+**今天已经开始接到策划的需求，开始着手实现了，而且不仅局限在_NoBuild_部分的代码，也包括核心的_Scripts_代码**
 
 ## Git&SourceTree理解
 
