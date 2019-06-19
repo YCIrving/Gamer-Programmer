@@ -1,5 +1,3 @@
-* 
-  
 * Source Tree使用：
   
   * 新建一个连接：找到对应仓库的网页连接，如github或bitbucket，之后复制下来

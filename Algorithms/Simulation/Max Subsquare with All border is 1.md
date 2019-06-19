@@ -1,3 +1,7 @@
+
+
+[TOC]
+
 # Max Subsquare with All 1 Borders
 
 给定一个宽高为n的0/1的二值方阵，计算矩阵中满足四条边都是1的最大正方形的面积。

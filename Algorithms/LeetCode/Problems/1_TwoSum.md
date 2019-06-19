@@ -1,3 +1,5 @@
+[TOC]
+
 # [1\. Two Sum](https://leetcode.com/problems/two-sum/)
 
 Difficulty: **Easy**
@@ -167,6 +169,8 @@ public:
       cout << itr->first << "  " << itr->second << endl; 
   } 
   
+  ```
+
 // 清空哈希表
   my_map.clear();
   ```
@@ -194,7 +198,7 @@ public:
 
 ### Code: 
 
-```c++
+​```c++
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
@@ -213,7 +217,7 @@ public:
         return {};
     }
 };
-```
+  ```
 
 ### Rethinking:
 
