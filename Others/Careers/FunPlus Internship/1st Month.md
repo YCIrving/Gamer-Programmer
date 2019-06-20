@@ -226,3 +226,232 @@ BECameraRTS.instance.InertiaUse = false;
 
 
 
+# Day 12-22: 06.05 - 06.20
+
+## Rider中对变量的重命名
+
+如果需要修改一个变量的名称，而且希望同步修改所有引用到的位置，在选中变量之后使用`Command+R+R`可以一次性完成所有修改，该方法也可以通过右键变量，找到`Refactor`中的`Rename`即可。
+
+
+
+## C#命名规范
+
+![Img](assets/C# Naming Conventions.png)
+
+更多规则详见[github]([https://github.com/ktaranov/naming-convention/blob/master/C%23%20Coding%20Standards%20and%20Naming%20Conventions.md](https://github.com/ktaranov/naming-convention/blob/master/C%23 Coding Standards and Naming Conventions.md)).
+
+## Unity中对Prefab加锁的前端实现
+
+需求：
+
+> xlock
+>
+> - 每个锁都有名字（字符串，比较时大小写不敏感，存储、显示时有大小写）
+>
+> - 所有 api 的返回值都用 json 表示
+>
+> - 可以通过 lock 加锁，参数：lockName、userName
+>
+>   - 如获取成功，返回 {"result": "ok"}
+>
+>   - 同一 userName 可重复获取已持有的锁，返回 {"result": "already"}
+>
+>   - 如果该锁已被他人获取，返回 {"error": "the lock is being hold by xxx"}，xxx 是持有者 userName
+>
+>   - 其它错误，返回 {"error": "..."}，填充实际错误信息
+>
+> - 可以通过 unlock 解锁，参数：lockName、userName
+>
+>   - 如该用户持有该锁，执行解锁，如果成功，返回 {"result": "ok"}
+>
+>   - 对于同一个锁，不管之前曾重复执行过多少次 lock，一次 unlock 就解锁
+>
+>   - 如果该锁未被任何用户持有，返回 {"error": "the lock is not being hold by anyone"}
+>
+>   - 如果该锁正被其他用户持有，返回 {"error": "the lock is being hold by xxx"}，xxx 是持有者 userName
+>
+>   - 其它错误，返回 {"error": "..."}，填充实际错误信息
+>
+> - 可以通过 steal 偷锁，参数：lockName、userName
+>
+>   - 如果该锁正被他人持有，改换持有者，如成功，返回 {"result": "ok"}
+>
+>   - 如果该锁无人持有，返回 {"error": "the lock is not being hold by anyone"}
+>
+>   - 同一 userName 可重复偷已持有的锁，返回 {"result": "already"}
+>
+>   - 其它错误，返回 {"error": "..."}，填充实际错误信息
+>
+> - 可以通过 lockInfo 查询指定锁的状态
+>
+>   - 如果未被任何人持有，返回 {"result": "free"}
+>
+>   - 如果正被某人持有，返回 {"result": "being hold by xxx"}
+>
+>   - 如发生意外，返回 {"error": "..."}，填充实际错误信息
+>
+> - 可以通过 list 查询指定用户持有的锁，参数：userName
+>
+>   - 如果该用户持有锁，返回一个锁名数组：
+>   
+>   ```
+> 	"abc/ddd/file1",
+>
+> 	"abc/ddd/file2",
+>
+> 	"abc/ddd/file9"
+> 	```
+>   
+> - 如果未持有任何锁，返回 []
+>   
+> - 如发生意外，返回 {"error": "..."}，填充实际错误信息
+>   
+> - 可以通过 listAll 查询所有上锁的锁，无参数
+>
+>   - 如果有上锁的的锁，返回一个数组：
+>
+> 	```
+> {"lockName": "abc/ddd/file1", "userName": "abc"},
+> 	
+> 	{"lockName": "abc/ddd/file2", "userName": "abc"},
+> 	
+> 	{"lockName": "abc/ddd/file9", "userName": "ddd"}
+> 	```
+> 	
+> - 如发生意外，返回 {"error": "..."}，填充实际错误信息
+>   
+> - 可以通过 log 查询（查询以外的）操作日志，参数：n（默认 100）
+>
+>   - 返回最后 n 条操作日志（按时间正序排列）：
+>   
+>   
+>   ```
+>     "2018-12-13 12:10:15 zhangsan locked abc/ddd/file1",
+>
+>     "2018-12-13 12:10:18 zhangsan unlocked abc/ddd/file1",
+>
+>     "2018-12-13 15:10:15 lisi stole abc/ddd/file2",
+>
+>     "2018-12-13 18:10:15 zhansan tried to lock abc/ddd/file2, but failed, because it was being hold by lisi",
+>   ...
+>   ```
+>   
+> - 可以采用任意本地存储保存当前锁状态，极端情况下，可通过删除本地文件清除所有锁
+>
+> - 查询以外的所有操作都要有日志
+
+后端实现的接口：
+
+> - 所有的请求都是post类型
+>
+> - 所有的响应都是text/plain 内容都是json格式的
+>
+> 1. 锁文件 
+>
+> ```
+> request:
+> 
+> http:10.0.34.161:8899/cmd/lock
+> 
+> body：”args=-UserName ztr -Note xx -GUID ww"
+> 
+> response :
+> 
+> {“Code”:1, “Result”:”ok”}
+> ```
+>
+> 
+>
+> 2. 解锁文件 
+>
+> ```
+> request:
+> 
+> http:10.0.34.161:8899/cmd/unlock
+> 
+> body：”args=-UserName ztr  -GUID ww"
+> 
+> response:
+> 
+>  {“Code”:1, “Result”:”ok”}
+> ```
+>
+> 
+>
+> 3. 偷锁
+>
+> ```
+> request:
+> 
+> http:10.0.34.161:8899/cmd/stealLock
+> 
+> body：”args=-UserName ztr  -GUID ww"
+> 
+> response:
+> 
+>  {“Code”:1, “Result”:”ok”}
+> ```
+>
+> 
+>
+> 4. 查询锁的拥有者
+>
+> ```
+> request:
+> 
+> http:10.0.34.161:8899/cmd/findLockOwner
+> 
+> body：”args=-GUID ww"
+> 
+> response:
+> 
+>  {“Code”:1, “Result”:”ok”， “Data”:owner}
+> ```
+>
+> 
+>
+> 5. 查询某个人的所有锁
+>
+> ```
+> request:
+> 
+> http:10.0.34.161:8899/cmd/listOwnLock
+> 
+> body：”args=-UserName ztr”
+> 
+> response:
+> 
+>  {“Code”:1, “Result”:”ok”， “Data”:[]string{“lockOwner”:qtr, “lockName”:xxx, “note”:xxxx}}
+> ```
+>
+> 
+>
+> 6. 查询所有的锁
+>
+> ```
+> request:
+> 
+> http:10.0.34.161:8899/cmd/listAll
+> 
+> response:
+> 
+>  {“Code”:1, “Result”:”ok”， “Data”:[]string{“lockOwner”:qtr, “lockName”:xxx, “note”:xxxx}}
+> ```
+>
+> 
+>
+> 7. 查询最近n条的操作log
+>
+> ```
+> request:
+> 
+> http:10.0.34.161:8899/cmd/listOpLog
+> 
+> body: “args=-Num 10”
+> 
+> response:
+> 
+>  {“Code”:1, “Result”:”ok”， “Data”:[]string{}}
+> ```
+>
+> 
