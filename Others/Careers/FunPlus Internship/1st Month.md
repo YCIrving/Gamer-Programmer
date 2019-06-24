@@ -549,7 +549,7 @@ BECameraRTS.instance.InertiaUse = false;
 
    代码中if的部分是发送一个空请求，else部分是发送一个有内容的请求。首先定义一个`WebRequest`，之后设置`downloadHandler`和`downloadHandler`，准备上传和接收数据，设置RequestHeader，如果是普通字符串，设置为`application/x-www-form-urlencoded`，Json设置为`application/json`，最后为了保证一定会拿到返回值，需要不断检查`request`的`isDone`属性是否为真，否则就需要继续等待。
    
-   消息同步这里再多说一句，尝试了很多不同的方法，包括创建回调函数(invoke) 、`yield return _request.SendWebRequest();`和使用`coroutines`，发现还是使用while doen这样比较好用而且简单。
+   消息同步这里再多说一句，尝试了很多不同的方法，包括创建回调函数(invoke) 、`yield return _request.SendWebRequest();`和使用`coroutines`，发现还是使用while doen这样比较好用而且简单，但官方并不推荐这么写。
    
    
    
