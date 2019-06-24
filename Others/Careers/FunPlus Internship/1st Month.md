@@ -242,7 +242,9 @@ BECameraRTS.instance.InertiaUse = false;
 
 ## Unity中对Prefab加锁的前端实现
 
-需求：
+这段时间一直在实现这个需求，感想就是Unity对个性化定制支持很到位，竟然可以手动添加菜单项、右键菜单项等，里面的函数响应也很多。其次就是，原来并不是所有代码都是只在运行时被执行，设置编辑器的代码跟游戏本身已经没有关系了，只要编辑器开着就会被执行。
+
+再来说说这个需求本身，目的是防止多人同时修改同一个prefab文件，导致冲突，因此在修改前需要对该文件上锁，上锁之后才能进行编辑，编辑之后再解锁即可。具体的需求如下：
 
 > xlock
 >
@@ -300,7 +302,7 @@ BECameraRTS.instance.InertiaUse = false;
 > 	"abc/ddd/file2",
 >
 > 	"abc/ddd/file9"
-> 	```
+> ```
 >   
 > - 如果未持有任何锁，返回 []
 >   
@@ -455,3 +457,472 @@ BECameraRTS.instance.InertiaUse = false;
 > ```
 >
 > 
+
+这是本人实习期间实现的第一个较为独立的功能，虽然并不是直接作用到游戏中，但是也十分有意义，代码量最终为800行。下面说一下最终的实现细节：
+
+1. 最开始肯定是要实现一个上锁的小demo，需要两个大的部分，一是监听打开prefab事件，二是与服务器通讯。
+
+2. 查了很多资料后，采用[下面的方式](https://forum.unity.com/threads/editor-callback-for-prefab-mode-being-open.566803/)解决第一个问题：
+
+   ```c#
+       static XLock()
+       {
+           PrefabStage.prefabStageOpened += OnPrefabStageOpened;
+           EditorApplication.update += Update;
+       }
+   
+       static void OnPrefabStageOpened(PrefabStage prefabStage)
+       {      
+           if (!XGlobalFlag.xGlobalFlag) return;
+           // lock prefab
+           var prefabPath = prefabStage.prefabAssetPath;
+           var guid = AssetDatabase.AssetPathToGUID(prefabPath);
+           try
+           {
+               LockFile(guid, prefabPath);
+           }
+           catch (Exception e)
+           {
+               _goBackToPreviousStage = true;
+               // EditorUtility.DisplayDialog("Error", e.ToString(), "OK");
+           }
+       }
+   ```
+
+   其中，定义一个主类`XLock`，在里面加上打开prefab时要调用的函数`OnPrefabStageOpened`，之后在外层实现即可。这里还需要注意的是`_goBackToPreviousStage`这个变量，它控制着是否需要返回上一层界面，即如果传输中发生了异常，则不能打开这个prefab，因此需要设置`_goBackToPreviousStage`为`true`，之后在`XLock`的`Update()`函数中进行界面的更新：
+
+   ```c#
+       static void Update()
+       {
+           if (_goBackToPreviousStage)
+           {
+               StageUtility.GoBackToPreviousStage();
+               _goBackToPreviousStage = false;
+           }
+   
+           if (_request == null)
+               return;
+     
+           if (_request.isDone)
+           {
+   //                _callback?.Invoke();
+   //                _callback = null;
+                   _request = null;
+           }
+       }
+   ```
+
+   
+
+3. 基础的HTTP通讯：
+
+   ```c#
+       static void PostRequest(string method, string body)
+       {
+           if (_request != null) return;
+   
+           var url = _baseUrl + "/" + method;
+           _request = new UnityWebRequest(url, "POST");
+   
+           if (method.Equals("listAll"))
+           {
+               _request.downloadHandler = new DownloadHandlerBuffer();
+               _request.SendWebRequest();
+           }
+   
+           else
+           {
+               byte[] bodyRaw = Encoding.UTF8.GetBytes(body);
+               _request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+               _request.downloadHandler = new DownloadHandlerBuffer();
+               // _request.SetRequestHeader("Content-Type", "application/json");
+               _request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+               _request.SendWebRequest();
+           }
+   
+           while (!_request.isDone)
+           {
+               Thread.Sleep(1);
+           }
+       }
+   ```
+
+   代码中if的部分是发送一个空请求，else部分是发送一个有内容的请求。首先定义一个`WebRequest`，之后设置`downloadHandler`和`downloadHandler`，准备上传和接收数据，设置RequestHeader，如果是普通字符串，设置为`application/x-www-form-urlencoded`，Json设置为`application/json`，最后为了保证一定会拿到返回值，需要不断检查`request`的`isDone`属性是否为真，否则就需要继续等待。
+   
+   
+   
+4. 只有，在实际上锁之前，我们还需要得到用户设置的用户名，这里就需要用到弹窗获得用户输入的功能了，由于Unity 2018中没有找到模态(Modal)的输入窗口，所以我们换了个思路，使用模态提示和非模态的输入窗口混合来接收用户输入：
+
+   ```c#
+       static void CheckUnityUserName()
+       {
+           var unityUserName = PlayerPrefs.GetString("UnityUserName");
+           if (string.IsNullOrEmpty(unityUserName))
+           {
+               if (!XSetUserNameWindow.userNameSetDone)
+               {
+                   EditorUtility.DisplayDialog("Please set your user name first.", "", "OK");
+                   XSetUserNameWindow.ShowWindow();
+                   throw new Exception("Please set your user name first.");
+               }
+               unityUserName = XSetUserNameWindow.unityUserName;
+               PlayerPrefs.SetString("UnityUserName", unityUserName);
+               PlayerPrefs.Save();
+           }
+       }
+       
+   
+   public class XSetUserNameWindow : EditorWindow
+   {
+       public static string unityUserName="";
+       public static bool userNameSetDone = false;
+    
+       // [MenuItem("Tools/Test Modal Editor Window")]
+   
+       public static void Init()
+       {
+           unityUserName = "";
+           userNameSetDone = false;
+       }
+       public static void ShowWindow()
+       {      
+           // xSetUserNameWindow.CreateInstance<xSetUserNameWindow>().showModal();
+           XSetUserNameWindow.CreateInstance<XSetUserNameWindow>().Show();
+           
+       }
+    
+       void OnEnable()
+       {
+    
+       }
+    
+       void OnDisable()
+       {
+           //setMainWindowFocus();
+       }
+    
+       void OnGUI()
+       {
+                   
+           GUI.Label(new Rect(30, 10, Screen.width, 20), "Please enter your git username: ");
+           GUI.Label(new Rect(30, 40, 100, 20), "User Name");
+           unityUserName = GUI.TextField(new Rect(100, 40, 200, 20), unityUserName, 20);
+           // unityUserName = GUILayout.TextField("User Name", this.unityUserName, 30);
+           if (GUI.Button(new Rect(100, 80, 200, 20), "Save"))
+           {
+               
+               if (string.IsNullOrEmpty(unityUserName))
+               {
+                   EditorUtility.DisplayDialog("User Name cannot be empty", "", "OK");
+               }
+               else
+               {
+                   userNameSetDone = true;
+                   EditorUtility.DisplayDialog("User Name Saved", "Set your user name to: " + unityUserName, "OK");
+                   this.Close();
+               }
+           }
+       }
+       void showModal()
+       {
+           MethodInfo dynShowModal = this.GetType().GetMethod("ShowModal", BindingFlags.NonPublic | BindingFlags.Instance);
+           dynShowModal.Invoke(this, new object[] { });
+       }
+   }
+   ```
+
+   我们将用户名保存在PlayerPrefs中，在上锁前，我们首先会检查用户的用户名是否存在，如果不存在，则弹窗提示，并打开输入窗口接收输入，当用户输入合法的用户名并保存后，设置`userNameSetDone`为`true`，下次运行用户名检查函数时就能读取用户名了。
+
+5. 有了上面两个基本的功能，我们就可以实现基本的上锁和解锁功能了：
+
+   ```c#
+       public static void LockFile(string guid, string prefabPath)
+       {
+   //        PlayerPrefs.DeleteKey("UnityUserName");
+   //        PlayerPrefs.Save();
+   //        xSetUserNameWindow.init();
+           
+           // S1: checking unity user name
+           try
+           {
+               CheckUnityUserName();
+   
+           }
+           catch (Exception e)
+           {
+               throw e;
+           }
+           
+           var unityUserName = PlayerPrefs.GetString("UnityUserName");
+           
+           // S2: posting http request
+           // string json = "{ \"UserName\": \"" + unityUserName + "\", \"GUID\": \"" + guid + "\", \"Note\": \"" + prefabPath +"\"}";
+           
+           var requestBody = "args= -UserName " + unityUserName + " -Note " + prefabPath + " -GUID " + guid;
+           PostRequest("lock", requestBody);
+           
+           
+           Debug.Log("Lock function:");
+           Debug.Log("Sent: "+ requestBody);
+           Debug.Log("Received: " + _request.downloadHandler.text);
+           
+           // S3: analysing received json
+           XAnalyseJsonBasic jsonAnalysed = JsonUtility.FromJson<XAnalyseJsonBasic>(_request.downloadHandler.text);
+   
+           _responseCode = jsonAnalysed.code;
+           _responseResult = jsonAnalysed.result;
+   //        _callback = () =>
+   //        {
+   //            code = _request.responseCode;
+   //            result = _request.downloadHandler.text;
+   //        };
+   
+           // S4: Acting based on analysed json
+           if (_responseCode != 1)
+           {
+               EditorUtility.DisplayDialog("Lock file failed! " + _responseResult, "", "OK");
+               throw new Exception("Lock file failed! " + _responseResult);
+           }
+           else
+           {
+               // EditorUtility.DisplayDialog("Lock file success!", "", "OK");
+           }
+       }
+   ```
+
+   ```c#
+       public static void UnlockFile(string guid, string prefabPath)
+       {
+           try
+           {
+               CheckUnityUserName();
+   
+           }
+           catch (Exception e)
+           {
+               throw e;
+           }
+           
+           var unityUserName = PlayerPrefs.GetString("UnityUserName");
+           var prefabNameTemp = prefabPath.Split('/');
+           var prefabName = prefabNameTemp[prefabNameTemp.Length - 1];
+           
+           var requestBody = "args= -UserName " + unityUserName + " -GUID " + guid;
+           // string json = "{ \"UserName\": \"" + unityUserName + "\", \"GUID\": \"" + guid + "\", \"Note\": \"" + prefabPath +"\"}";
+           
+           PostRequest("unlock", requestBody);
+   
+           XAnalyseJsonBasic jsonAnalysed = JsonUtility.FromJson<XAnalyseJsonBasic>(_request.downloadHandler.text);
+   
+           _responseCode = jsonAnalysed.code;
+           _responseResult = jsonAnalysed.result;
+   
+           Debug.Log("Unlock function:");
+           Debug.Log("Sent: "+ requestBody);
+           Debug.Log("Received: " + _request.downloadHandler.text);
+           
+           if (_responseCode != 1)
+           {
+               EditorUtility.DisplayDialog("Unlock file failed! " + _responseResult, "", "OK");
+               throw new Exception("Unlock file failed! " + _responseResult);
+           }
+           else
+           {
+               EditorUtility.DisplayDialog("Unlock the " + prefabName + " success!", "", "OK");
+           }
+       }
+   ```
+
+   其中需要注意的包括对回传数据的解析和对异常的处理。
+
+   由于服务器传回的数据是Json格式，所以在接收和解析数据时我们首先要定义一个类，来表示Json中的各个部分：
+
+   ```c#
+   using System.Collections;
+   using System.Collections.Generic;
+   using UnityEngine;
+   
+   [System.Serializable]
+   
+   public class FileLock
+   {
+       public string lockOwner;
+       public string lockName;
+       public string note;
+   
+   }
+       
+   public class XAnalyseJsonWithLocks
+   {
+       public int code;
+       public string result;
+       public FileLock[] data;
+   }
+   ```
+
+   之后将该类实例化，并使用
+
+   ```c#
+   XAnalyseJsonBasic jsonAnalysed = JsonUtility.FromJson<XAnalyseJsonBasic>(_request.downloadHandler.text);
+   ```
+
+   来得到解析后的结果。
+
+   异常处理：抛出异常可以打断正在执行的函数，并且可以统一在外层进行输出控制。
+
+6. 最后就是右键菜单的添加：
+
+   ```c#
+       [MenuItem("Assets/xLock/Lock", true)]
+       static bool ValidateRightMouseLock()
+       {
+           return Selection.activeGameObject != null && XGlobalFlag.xGlobalFlag;
+       }
+   
+       [MenuItem("Assets/xLock/Lock")]
+       static void RightMouseLock()
+       {
+           var prefabPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+           if (!prefabPath.EndsWith(".prefab")) return;
+           var guid = AssetDatabase.AssetPathToGUID(prefabPath);
+           try
+           {
+               LockFile(guid, prefabPath);
+           }
+           catch (Exception e)
+           {
+               _goBackToPreviousStage = true;
+               // EditorUtility.DisplayDialog("Error", e.ToString(), "OK");
+           }
+           
+       }
+   ```
+
+   其中，在中括号中加入`'true'`参数的函数负责验证是否要启用该右键菜单，即通过在其中加入验证条件，可以控制该菜单是否被激活。
+
+   没有`'true'`参数的函数控制点击该选项后，具体执行的内容。
+
+7. 最后，光监听prefab打开是不够的，还需要对任何写入操作进行验证，这里主要包括移动、删除、保存三种操作：
+
+   ```c#
+   public class XCustomAssetModificationProcessor : UnityEditor.AssetModificationProcessor
+   {
+       private static AssetMoveResult OnWillMoveAsset(string sourcePath, string destinationPath)
+       {
+           Debug.Log("Moving assets from Source path: " + sourcePath + "to Destination path: " + destinationPath + ".");
+           AssetMoveResult assetMoveResult = AssetMoveResult.DidNotMove;
+               
+           if (sourcePath.EndsWith(".prefab") && XGlobalFlag.xGlobalFlag)
+           {
+               var guid = AssetDatabase.AssetPathToGUID(sourcePath);
+   //            try
+   //            {
+   //                xlock.LockFile(Guid, sourcePath);
+   //            }
+   //            catch (Exception e)f
+   //            {
+   //                assetMoveResult = AssetMoveResult.FailedMove;
+   //                EditorUtility.DisplayDialog("Move failed!", "You cannot lock the prefab: " + sourcePath + ".", "Ok");
+   //                return assetMoveResult;
+   //            }
+   
+               try
+               {
+                   XLock.UnlockFile(guid, sourcePath);
+               }
+               catch (Exception e)
+               {
+                   assetMoveResult = AssetMoveResult.FailedMove;
+                   EditorUtility.DisplayDialog("Move failed!", "You cannot unlock the prefab: " + sourcePath + ".", "Ok");
+                   return assetMoveResult;
+               }
+   
+               try
+               {
+                   guid = AssetDatabase.AssetPathToGUID(destinationPath);
+                   XLock.LockFile(guid, destinationPath);
+   
+               }
+               catch (Exception e)
+               {
+                   assetMoveResult = AssetMoveResult.FailedMove;
+                   EditorUtility.DisplayDialog("Move failed!", "You cannot lock the prefab: " + destinationPath + ".", "Ok");
+                   return assetMoveResult;
+               }
+   
+           }
+           return assetMoveResult;
+       }
+   
+       private static AssetDeleteResult OnWillDeleteAsset(string prefabPath, RemoveAssetOptions opt)
+       {
+           Debug.Log("Deleting assets: " + prefabPath + ".");
+           AssetDeleteResult assetDeleteResult = AssetDeleteResult.DidNotDelete;
+           
+           if (prefabPath.EndsWith(".prefab") && XGlobalFlag.xGlobalFlag)
+           {
+               var guid = AssetDatabase.AssetPathToGUID(prefabPath);
+               try
+               {
+                   XLock.UnlockFile(guid, prefabPath);
+               }
+               catch (Exception e)
+               {
+                   assetDeleteResult = AssetDeleteResult.FailedDelete;
+                   EditorUtility.DisplayDialog("Deletion failed!", "You cannot unlock the prefab: " + prefabPath + ".", "Ok");
+               }
+           }
+           
+           return assetDeleteResult;
+       }
+   
+       private static string[] OnWillSaveAssets(string[] paths)
+       {
+           Debug.Log("Saving assets...");
+           var pathsToSave = new List<string>();
+           foreach (string path in paths)
+           {
+               pathsToSave.Add(path);
+               if (path.EndsWith(".prefab") && XGlobalFlag.xGlobalFlag )
+               {
+                   var guid = AssetDatabase.AssetPathToGUID(path);
+                   try
+                   {
+                       XLock.LockFile(guid, path);
+                   }
+                   catch (Exception e)
+                   {
+                       pathsToSave.Remove(path);
+                       EditorUtility.DisplayDialog("Deletion failed!", "You cannot lock the prefab: " + path + ".", "Ok");
+                   }
+               }
+           }
+           return pathsToSave.ToArray();
+       }
+   }
+   ```
+
+   这里主要是用对函数，定义一个类，继承自`UnityEditor.AssetModificationProcessor`，之后对`OnWillMoveAsset`、`OnWillDeleteAsset`、`OnWillSaveAssets`这三个函数进行实现即可。
+
+总结一下就是，实现这个需求包括两大部分，第一是对用户操作的监听，第二是与服务器端的通信。但第二点只要有模板都很好实现，主要是第一点，如果合理并且全面地防止同时修改prefab情况的发生。
+
+# Day 23-24: 06.21, 06.24
+
+这两天回到地图编辑器中，实现了建筑物的复选和整排城墙的一次性选取功能，里面比较重要的一点是，如何点击按钮触发一个toggle：
+
+```c#
+Toggle t = GameObject.Find("ToggleMultiChooseMode").GetComponent<Toggle>();
+t.isOn = true;
+```
+
+而不能直接调用这个toggle的触发函数`OnButtonMultiChooseMode(bool value)`，这样会使得状态错误。而通过改变isOn，可以实现正确的状态跳转。
+
+
+
+# 一月总结
+
+到6月20号实际上已经实习一个月了，但由于最近几天完成的还是开始的工作，所以就一并写在了第一个月里面。一个月里，从最初的一脸懵逼，到后来渐渐熟悉开发环境，再到现在独立解决问题，甚至还有点觉得工作了几年的同事代码能力也就那样（好像有点膨胀了，撤回），心态起伏还是比较大的。然后自己的工作热情也比较高涨，竟然实现了地铁上写代码的成就，果然这种可视化的编程过程比较对我的胃口。一个月前对自己提出的要求也都基本实现了，现在也是一个有微小生产力的程序员了。
+
+工作难度不是很高，遇到不会的也可以查，再不会就问问leader，基本都可以解决或者找到替代方案。另外感觉leader每天讨论和开会的时间比较多，实际写代码时间并没有很多，但就是出成果，每天都有很多可以展示，所以代码效率还是很重要的，自己写过的代码尽量能够理解并记忆，不断积累就能提高自己的代码效率。而不是实现一个功能需要不断地去搜索和查询。
+
+公司氛围比较好，完成需求的满足感也很高，现在就是觉得没有很系统地学习，导致有些代码不知道实现原理、需求无从下手以及不知道为什么这么写可以实现对应的功能。所以进入7月份，实验室那边工作压力不重了以后，就要静下心来系统地学习一下语法和面向对象的知识，同时准备秋招，fighting！
