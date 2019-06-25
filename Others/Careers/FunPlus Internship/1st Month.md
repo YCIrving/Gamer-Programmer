@@ -910,6 +910,8 @@ BECameraRTS.instance.InertiaUse = false;
 
 # Day 23-24: 06.21, 06.24
 
+## 点击按钮触发Toggle
+
 这两天回到地图编辑器中，实现了建筑物的复选和整排城墙的一次性选取功能，里面比较重要的一点是，如何点击按钮触发一个toggle：
 
 ```c#
@@ -918,6 +920,39 @@ t.isOn = true;
 ```
 
 而不能直接调用这个toggle的触发函数`OnButtonMultiChooseMode(bool value)`，这样会使得状态错误。而通过改变isOn，可以实现正确的状态跳转。
+
+## Unity中的几个提示
+
+- 根据条件赋值
+
+```
+if(statement) a=b;
+else a=c;
+```
+
+改成：
+
+```
+a = statement? a : b
+```
+
+- 反转if表达式
+
+```
+if(statement)
+{
+	...
+}
+```
+
+改成
+
+```
+if (!statement) return;
+...
+```
+
+
 
 
 
