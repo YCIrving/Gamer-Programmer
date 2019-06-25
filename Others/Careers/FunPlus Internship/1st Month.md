@@ -238,7 +238,7 @@ BECameraRTS.instance.InertiaUse = false;
 
 ![Img](assets/C# Naming Conventions.png)
 
-更多规则详见[github]([https://github.com/ktaranov/naming-convention/blob/master/C%23%20Coding%20Standards%20and%20Naming%20Conventions.md](https://github.com/ktaranov/naming-convention/blob/master/C%23 Coding Standards and Naming Conventions.md)).
+更多规则详见[github]([https://github.com/ktaranov/naming-convention)和[微软官方文档](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions).
 
 ## Unity中对Prefab加锁的前端实现
 
@@ -921,7 +921,7 @@ t.isOn = true;
 
 而不能直接调用这个toggle的触发函数`OnButtonMultiChooseMode(bool value)`，这样会使得状态错误。而通过改变isOn，可以实现正确的状态跳转。
 
-## Unity中的几个提示
+## Unity中的几个代码修改提示
 
 - 根据条件赋值
 
@@ -954,11 +954,21 @@ if (!statement) return;
 
 
 
+## 以后写代码要多加注释
 
+注释遵循的几个规则：
+
+- 注释写在单独的行中，而不是代码后方；
+- 注释类似英文句子，句子开头大写，结尾要有句点等标点；
+- 注释与`//`之间要有一个空格
 
 # 一月总结
 
 到6月20号实际上已经实习一个月了，但由于最近几天完成的还是开始的工作，所以就一并写在了第一个月里面。一个月里，从最初的一脸懵逼，到后来渐渐熟悉开发环境，再到现在独立解决问题，甚至还有点觉得工作了几年的同事代码能力也就那样（好像有点膨胀了，撤回），心态起伏还是比较大的。然后自己的工作热情也比较高涨，竟然实现了地铁上写代码的成就，果然这种可视化的编程过程比较对我的胃口。一个月前对自己提出的要求也都基本实现了，现在也是一个有微小生产力的程序员啦。
+
+刚到一个月的时候，leader给我看了自己的培养计划，反正到目前为止，第一个月的目标都实现了，自己也会尽力完成后面的工作。
+
+![groth plan](assets/growth plan.jpg)
 
 工作难度不是很高，遇到不会的也可以查，再不会就问问leader，基本都可以解决或者找到替代方案。另外感觉leader每天讨论和开会的时间比较多，实际写代码时间并没有很多，但就是出成果，每天都有很多可以展示，所以代码效率还是很重要的，自己写过的代码尽量能够理解并记忆，不断积累就能提高自己的代码效率。而不是实现一个功能需要不断地去搜索和查询。
 
