@@ -21,7 +21,7 @@
 开发过程中主要用到的软件包括：Unity、RIder、IntelliJ、Excel、Terminal、Jira、SourceTree
 
 * Unity：预览各类游戏场景和进行试玩
-* Rider：编写和调试Unity工程中涉及的C_#_代码
+* Rider：编写和调试Unity工程中涉及的C#代码
 * IntelliJ：编写和调试Unity工程中涉及的Lua代码
 * Excel：查看游戏策划维护的各种表格
 * Terminal：运行脚本，用于将excel表格转化为json和lua等游戏中可以被读取的格式
@@ -34,7 +34,7 @@
 
 ## IntelliJ与Unity的协作
 
-1. 搜索并安装_AmmyLua_插件，可以让Lua代码高亮显示
+1. 搜索并安装 _AmmyLua_ 插件，可以让Lua代码高亮显示
 
    ![IntelliJ Plugins](assets/IntelliJ-plugins.png)
 
@@ -44,7 +44,7 @@
 
 ## Rider 与Unity的协作
 
-1. 如果安装了Rider，可以直接在Unity中双击C_#_文件，即可自动打开Rider
+1. 如果安装了Rider，可以直接在Unity中双击C#文件，即可自动打开Rider
 
 2. 在Rider中，可以通过输出或者加入断点的方式来进行代码调试，输出除了使用标准的`print()`之外，还可以使用定义好的`Debug.Log(Message)`方法来输出Message信息。如果是添加断点，在添加之后，需要开启调试模式，即右上角的绿色Bug，之后在Unity中运行游戏，即可在断点中停止。
 
@@ -179,7 +179,7 @@ cond2(no)->op2->e
 
 # Day 8-9: 05.30 - 05.31
 
-**今天已经开始接到策划的需求，开始着手实现了，而且不仅局限在_NoBuild_部分的代码，也包括核心的_Scripts_代码**
+**今天已经开始接到策划的需求，开始着手实现了，而且不仅局限在 _NoBuild_ 部分的代码，也包括核心的 _Scripts_ 代码**
 
 ## Git&SourceTree理解
 
@@ -196,7 +196,7 @@ cond2(no)->op2->e
 
 ## 编码经验
 
-1. 数据结构很重要。针对不同的目标，使用不同的数据结构，比如项目中存储不同类型的建筑物，每个建筑物有一个_索引ID_，就比较适合用Dictionary_，_ID_为_Key，而如果用list存储，用下标在list中查找，就会导致后期对ID有一些要求，比如必须跟下标一致等，导致编码繁琐。
+1. 数据结构很重要。针对不同的目标，使用不同的数据结构，比如项目中存储不同类型的建筑物，每个建筑物有一个 _索引ID_ ，就比较适合用 _Dictionary_，_ID_ 为 _Key_，而如果用list存储，用下标在list中查找，就会导致后期对ID有一些要求，比如必须跟下标一致等，导致编码繁琐。
 2. 多增少改。如果需要改接口，尽量在原有基础上增加一个新的，而不是直接修改旧的接口。因为旧的接口可能被很多地方使用，而新的接口只需要当前使用，当然如果是1中所说的情况，则最好从本质上解决问题。
 
 # Day 10-11: 06.03 - 06.04
@@ -489,7 +489,7 @@ BECameraRTS.instance.InertiaUse = false;
        }
    ```
 
-   其中，定义一个主类`XLock`，在里面加上打开prefab时要调用的函数`OnPrefabStageOpened`，之后在外层实现即可。这里还需要注意的是`_goBackToPreviousStage`这个变量，它控制着是否需要返回上一层界面，即如果传输中发生了异常，则不能打开这个prefab，因此需要设置`_goBackToPreviousStage`为`true`，之后在`XLock`的`Update()`函数中进行界面的更新：
+   其中，定义一个主类`XLock`，在里面加上打开prefab时要调用的函数`OnPrefabStageOpened`，之后在外层实现即可。这里还需要注意的是` _goBackToPreviousStage`这个变量，它控制着是否需要返回上一层界面，即如果传输中发生了异常，则不能打开这个prefab，因此需要设置`_goBackToPreviousStage`为`true`，之后在`XLock`的`Update()`函数中进行界面的更新：
 
    ```c#
        static void Update()
