@@ -4,11 +4,11 @@
   
   * 找到主页菜单栏中的新建->从URL克隆
   
-    ![Source Tree Clone](assets/SourceTree Clone.png)
+    ![Source Tree Clone](assets/SourceTree-clone.png)
   
   * 在源URL中填入网址，之后在本地工作区新建一个跟仓库同名的文件夹，选择为目标路径，软件会自动填写名称区域，之后点开高级选项，找到里面的对应的分支。一般来说研发阶段选择develop分支，而master分支内容很少，因为在研发完成阶段才会merge到master分支。这里如果缺省则会默认检出master分支。
   
-    ![Source Tree Choose Branch](assets/SourceTree Choose Branch.png)
+    ![Source Tree Choose Branch](assets/SourceTree-choose-branch.png)
   
   * 检出后也可以在远端中的origin下查看不同分支，双击后就能完成切换。
   
@@ -18,16 +18,16 @@
   
   * 拉取时直接拉取就可以，下面四个选项不要勾
   
-    ![Source Tree Pull](assets/SourceTree Pull.png)
+    ![Source Tree Pull](assets/SourceTree-pull.png)
   
   * 推送时，确保已暂存文件中只存在自己修改过的文件，类似于 `git add` 命令，同时在下方填写注释，可以勾选立即推送，这样可以点击后直接提交，否则会出现本地仓库超前远端仓库的情形，也需要后期再次进行push
   
-    ![Source Tree Pull](assets/SourceTree Push.png)
+    ![Source Tree Pull](assets/SourceTree-push.png)
   
     
   
 * Unity布局：
-	![Unity Layout](assets/Unity Layout.png)
+	![Unity Layout](assets/Unity-layout.png)
 	
 	注意在WIndows中，将Console Enhanced调出来，并与原来的Console放置在一起
 	
@@ -39,7 +39,7 @@
 
 * 将个人和项目文件夹添加至个人收藏
 
-  ![Favorite Paths](assets/Favorite Paths.png)
+  ![Favorite Paths](assets/favorite-paths.png)
 
 * Mac中，按下_Option_键后，会发现窗口左上角的最大化按钮会变成加号，点击后的最大化不会将菜单栏隐藏
 

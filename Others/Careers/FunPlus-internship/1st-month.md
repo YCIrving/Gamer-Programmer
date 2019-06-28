@@ -36,11 +36,11 @@
 
 1. 搜索并安装_AmmyLua_插件，可以让Lua代码高亮显示
 
-   ![IntelliJ Plugins](assets\IntelliJ Plugins.png)
+   ![IntelliJ Plugins](assets/IntelliJ-plugins.png)
 
 2. 在IntelliJ中选择从源码新建工程，然后根目录选择Unity工程中的Lua目录
 
-   ![IntelliJ New Project](assets\IntelliJ New Project.png)
+   ![IntelliJ New Project](assets/IntelliJ-new-project.png)
 
 ## Rider 与Unity的协作
 
@@ -48,7 +48,7 @@
 
 2. 在Rider中，可以通过输出或者加入断点的方式来进行代码调试，输出除了使用标准的`print()`之外，还可以使用定义好的`Debug.Log(Message)`方法来输出Message信息。如果是添加断点，在添加之后，需要开启调试模式，即右上角的绿色Bug，之后在Unity中运行游戏，即可在断点中停止。
 
-   ![Rider Debug](assets\Rider Debug.png)
+   ![Rider Debug](assets/Rider-debug.png)
 
 ## 提交任务
 
@@ -58,7 +58,7 @@
 
 3. 今天在拉取时出现了另一种冲突，即本地文件比远端文件多的情况，在SourceTree中以蓝色形式展现，不同于黄色的相异，这种冲突不能通过重置解决，解决方式为删除本地的文件，选择移除即可。
 
-   ![SourceTree Conflict](assets\SourceTree Conflict.png)
+   ![SourceTree Conflict](assets/SourceTree-conflict.png)
 
 
 
@@ -106,7 +106,7 @@
    
 3. 设置物体tag：
 
-   ![Unity Pick Up](assets/Unity Pick Up.png)
+   ![Unity Pick Up](assets/Unity-pickup.png)
 
 4.拾取物体逻辑图
 
@@ -144,7 +144,7 @@ cond2(no)->op2->e
 
 3. 调试模式中，有时断点打上后会变成灰色。这种情况不用担心，只是说明程序目前不一定会执行到这里
 
-   ![Rider Grey Breakpoint](assets/Rider Grey Breakpoint.png)
+   ![Rider Grey Breakpoint](assets/Rider-grey-breakpoint.png)
 # Day 7: 05.29
 
 ## 在Scene中进行对象的绑定
@@ -159,7 +159,7 @@ cond2(no)->op2->e
 
 4. 绑定后，可以在代码中通过对成员变量的修改，直接控制UI界面。
 
-   ![Unity Binding in Unity](assets/Unity Binding in Unity.png)
+   ![Unity Binding in Unity](assets/Unity-binding.png)
 
 
 
@@ -167,15 +167,15 @@ cond2(no)->op2->e
 
 每次进行提交前，务必进行拉取操作，否则就会使得代码流进行分流，如下图所示。原因在于，提交前，你的代码并不是最新的，所以你提交之后会从旧版本中新增一个分支。
 
-![SourceTree Pull Before Push1](assets/SourceTree Pull Before Push1.png)
+![SourceTree Pull Before Push1](assets/SourceTree-pull-before-push1.png)
 
 
 
 解决方法：选择分叉的点，然后选择"回退"，之后选择软合并即可。
 
-![SourceTree Pull Before Push2](assets/SourceTree Pull Before Push2.png)
+![SourceTree Pull Before Push2](assets/SourceTree-pull-before-push2.png)
 
-![SourceTree Pull Before Push3](assets/SourceTree Pull Before Push3.png)
+![SourceTree Pull Before Push3](assets/SourceTree-pull-before-push3.png)
 
 # Day 8-9: 05.30 - 05.31
 
@@ -236,7 +236,7 @@ BECameraRTS.instance.InertiaUse = false;
 
 ## C#命名规范
 
-![Img](assets/C# Naming Conventions.png)
+![Img](assets/C#-naming-conventions.png)
 
 更多规则详见[github]([https://github.com/ktaranov/naming-convention)和[微软官方文档](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions).
 
@@ -968,7 +968,7 @@ if (!statement) return;
 
 刚到一个月的时候，leader给我看了自己的培养计划，反正到目前为止，第一个月的目标都实现了，自己也会尽力完成后面的工作。
 
-![groth plan](assets/growth plan.jpg)
+![groth plan](assets/growth-plan.jpg)
 
 工作难度不是很高，遇到不会的也可以查，再不会就问问leader，基本都可以解决或者找到替代方案。另外感觉leader每天讨论和开会的时间比较多，实际写代码时间并没有很多，但就是出成果，每天都有很多可以展示，所以代码效率还是很重要的，自己写过的代码尽量能够理解并记忆，不断积累就能提高自己的代码效率。而不是实现一个功能需要不断地去搜索和查询。
 
