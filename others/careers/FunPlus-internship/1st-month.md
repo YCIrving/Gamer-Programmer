@@ -1,4 +1,4 @@
-# 第一月：
+第一月：
 
 **时间：2019.05.20-2019.06.20**
 
@@ -135,6 +135,7 @@ cond2(yes)->op1->e
 cond2(no)->op2->e
 
 ```
+![pickup-flow-graph.png](assets/pickup-flow-graph.png)
 
 ## Rider中一些使用技巧
 

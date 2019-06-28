@@ -40,7 +40,3 @@
 * 将个人和项目文件夹添加至个人收藏
 
   ![Favorite Paths](assets/favorite-paths.png)
-
-* Mac中，按下_Option_键后，会发现窗口左上角的最大化按钮会变成加号，点击后的最大化不会将菜单栏隐藏
-
-* 使用_shift+command+3_可以全屏截图，_shift+command+4_可以自由截图
