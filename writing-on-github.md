@@ -1,5 +1,5 @@
 # Github中Markdown的编写准则
-发现本地的Typora编写好的markdown上传到github会出现一些问题，包括公式显示、图片显示以及斜体等，一方面当初为了方便，在Typora中打开了许多扩展功能，与github中的markdown格式有一些冲突，另外自己的编写格式也存在一些问题。由于最终希望用github呈现结果，所以转到了VS Code来编写markdown，这样在编辑时看到的结果就跟实际网页上呈现的结果一致了。而且VS Code支持git，所以可以直接提交，还省去了使用SourceTree的麻烦。特此记录一下本仓库编写时应该遵循的一些准则。
+发现本地的Typora编写好的markdown上传到github会出现一些问题，包括公式显示、图片显示以及斜体等，一方面当初为了方便，在Typora中打开了许多扩展功能，与github中的markdown格式有一些冲突，另外自己的编写格式也存在一些问题。由于最终希望用github呈现结果，所以转到了VS Code来编写markdown，这样在编辑时看到的结果就跟实际网页上呈现的结果一致了。而且VS Code支持git，所以可以直接提交，还省去了使用SourceTree的麻烦(但是如果需要可视化对整个仓库进行调整，SourceTree还是很方便的)。特此记录一下本仓库编写时应该遵循的一些准则。
 
 1. 除某些特殊文件如”README.md“和专有名词如"FunPlus"外，文件夹和文件名统一使用小写字母加"-"的形式，不允许存在空格，如"game-programmer"。
 2. 图片统一放在对应目录下的"assets"文件夹中，引用时使用相对路径。

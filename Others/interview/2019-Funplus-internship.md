@@ -1,11 +1,11 @@
-![img](assets/2019 Funplus Internship.jpg)
+![img](assets/2019-Funplus-internship.jpg)
 
 # 一面
 
 前端面试，问了一些基础问题：
 
 - TCP和UDP的区别
-- 进程和线程的区别
+- 进程和线程的区别v
 - 手写了一下二叉树的层次遍历
 
 # 二面

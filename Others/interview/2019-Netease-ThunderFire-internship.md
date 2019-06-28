@@ -94,7 +94,7 @@
 >
 > 应聘流程中有任何问题欢迎邮件咨询campusleihuo@163.com
 >
-> ![img](assets\2019 Netease Thunder Fire Internship.jpg)
+> ![img](assets\2019-NeteaseThunderFire-internship.jpg)
 
 # 一面
 

@@ -1,4 +1,4 @@
-> ![2019 IGG Internship](assets/2019 IGG Internship.jpg)
+> ![2019 IGG Internship](assets/2019-IGG-internship.jpg)
 
 # 一面
 
