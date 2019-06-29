@@ -25,45 +25,45 @@
 
     - 自定义`comp()`的降序排列：
 
-    ```c++
-    int comp(int a, int b)
-    {
-        return a>b;
-        // 等价于：
-        // if(a>b) return true;
-        // return false;
-    }
-    ```
+        ```c++
+        int comp(int a, int b)
+        {
+            return a>b;
+            // 等价于：
+            // if(a>b) return true;
+            // return false;
+        }
+        ```
 
-    这里的代码还是比较好记的，返回值的形式跟最终的排列形式一致。对结构体的排序也可以通过类似写法实现。
+        这里的代码还是比较好记的，返回值的形式跟最终的排列形式一致。对结构体的排序也可以通过类似写法实现。
 
     - 重载"<"的降序排序：
     
-    **该方法仅限于对非基本类型进行排序，如结构体或类等**。重载直接在类型中定义：
+        **该方法仅限于对非基本类型进行排序，如结构体或类等**。重载直接在类型中定义：
 
-    ```c++
-    struct Student
-    {
-        char name[101];
-        int age;
-        int score;
-        // 重载小于号
-        bool operator < (const Student &B) const 
+        ```c++
+        struct Student
         {
-            if (score!=B.score)
+            char name[101];
+            int age;
+            int score;
+            // 重载小于号
+            bool operator < (const Student &B) const 
             {
-                return score<B.score;
+                if (score!=B.score)
+                {
+                    return score<B.score;
+                }
+                else
+                {
+                    return strcmp(name,B.name);
+                }
             }
-            else
-            {
-                return strcmp(name,B.name);
-            }
-        }
-    }students[1000];
+        }students[1000];
 
-    ```
+        ```
 
-注：`sort()`是不稳定的排序，时间复杂度为$O(N*log(N))$，如果需要稳定排序，可以使用`stable_sort()`，复杂度不变。
+    注：`sort()`是不稳定的排序，时间复杂度为$O(N*log(N))$，如果需要稳定排序，可以使用`stable_sort()`，复杂度不变。
 
 2. `priority_queue`
 
