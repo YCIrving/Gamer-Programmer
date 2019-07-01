@@ -48,6 +48,7 @@
             int age;
             int score;
             // 重载小于号
+            // 记忆点1：需要两个const
             bool operator < (const Student &B) const 
             {
                 if (score!=B.score)
