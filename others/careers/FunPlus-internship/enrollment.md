@@ -31,7 +31,7 @@
     >
     > A10rVgIH
   
-    该账号可用于登录无线网、[企业wiki]( http://wiki.ifunplus.cn)(用于查询公司信息及相关制度，需要申请开通)
+    该账号可用于登录无线网、[企业wiki]( http://wiki.ifunplus.cn)(用于查询公司信息及相关制度，需要申请开通)、企业VPN
   
   * 企业NAS账号：
     

@@ -52,7 +52,8 @@
             {
                 if (score!=B.score)
                 {
-                    return score<B.score;
+                    // 将参数当成比较函数中的第二个参数
+                    return score>B.score;
                 }
                 else
                 {
@@ -60,6 +61,19 @@
                 }
             }
         }students[1000];
+
+
+        // 重载也可以写到结构体外面：
+        struct Student
+        {
+            int score;
+            // 重载小于号
+        }students[1000];
+
+        bool operator < (const Student &A, const Student &B)
+        {
+            return A.score<B.score;
+        }
 
         ```
 
