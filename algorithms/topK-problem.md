@@ -43,11 +43,11 @@ public class TopK {
     // 建堆
     private void buildHeap (int k, int[] data)
     {
-        // M 向上调整，所以0不需要调整
+        // ** M 向上调整，所以0不需要调整 **
         for(int i=1; i<k; i++)
         {
             int t = i;
-            // M 判断条件
+            // ** M 判断条件 **
             while(t!=0 && data[parent(t)]>data[t])
             {
                 // swap data[t] and data[parent(t)]
@@ -78,7 +78,7 @@ public class TopK {
         {
             // 将三者最小的换到最上面
             // 如果左边最小
-            // M 判断条件
+            // ** M 判断条件 **
             if(left(t)<k && data[left(t)]<data[right(t)]
             {
                 // swap data[left(t)] and data[t]
