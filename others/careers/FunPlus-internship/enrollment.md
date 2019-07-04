@@ -16,7 +16,8 @@
   
   * 企业邮箱：
   
-    > 	yichen.gao@kingsgroup.com
+    > yichen.gao@kingsgroup.com
+    >
     > Gmail密码
   
     该邮箱可用于登录[项目Jira](https://kingsgroupgames.atlassian.net/secure/RapidBoard.jspa?rapidView=213&projectKey=WD)(整个项目组的在线协作平台)、接受项目组相关信息，类似于校园网邮箱
