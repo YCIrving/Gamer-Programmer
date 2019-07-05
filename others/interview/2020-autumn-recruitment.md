@@ -30,4 +30,4 @@
 ![ali](assets/2020-Ali.jpg)
 
 # 腾讯大咖IEG
-![tencent-pre](assets/2020-TencentIEG-pre.jpg)
+![tencent-pre](assets/2020-TencentIEG-pre.jpeg)
