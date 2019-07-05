@@ -1,5 +1,5 @@
 # 字节跳动提前批
-![bytedance](assets/2020-Bytedance.jpg)
+![bytedance](assets/2020-Bytedance-pre.jpg)
 
 1. 6.23投递简历
 2. 6.30线上笔试
@@ -28,3 +28,6 @@
 # 阿里互娱微光计划
 （了解一下基本岗位，貌似只能内推，所以没投）
 ![ali](assets/2020-Ali.jpg)
+
+# 腾讯大咖IEG
+![tencent-pre](assets/2020-TencentIEG-pre.jpg)
