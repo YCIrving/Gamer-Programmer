@@ -41,3 +41,47 @@ S:FunctionName(arg1, arg2, function (ret)
 然后总结一下最近学到的东西：
 
 1. SourceTree 时间长需要清理一下，只保留自己修改的文件
+2. Unity中，一定要确保屏幕中要显示的内容每次都在OnGUI被刷新，否则就会发生点击后没反应的情况，从而误以为是逻辑问题，实际上是没有被显示出来。
+3. Unity中的TreeView中默认的排序功能只能对顶层的节点进行排序，下层的子节点不参与排序。所以如果树的顶层节点只有一个，则排序功能就失效了。
+
+# Day 31-32: 07.05, 07.07
+最近主要完成了TreeView的展示功能，包括读取prefab的树形结构，读取其中的条目，按照树形结构显示在window中。但关于TreeView，自己理解的还不够，所以仅记录一些自己认为比较有用的吧。
+
+1. 首先是逻辑部分，官网上封装的层级比较多，每个window包含一个treeview，负责显示树中的内容，每颗tree由不同的element组成，每个element包含深度、名称和id，存储为一个线性结构，按照深度和id恢复到原来的树形结构。
+2. 添加节点:
+```c#
+void SetMvvmTreeElements (GameObject openedPrefab)
+{
+        _mvvmPrefab = ScriptableObject.CreateInstance<MvvmPrefab>();
+        var gameObjectTreeElements = new List<MvvmGameObject>();
+        IDCounter = 0;
+                
+        var root = new MvvmGameObject("Root", -1, IDCounter);
+        gameObjectTreeElements.Add(root);
+
+        // 加入根节点后，排序功能会失效
+        root = new MvvmGameObject(_openedPrefab, 0, ++IDCounter);
+        gameObjectTreeElements.Add(root);
+
+        foreach (Transform child in _openedPrefab.transform)
+        {
+                AddChildrenRecursive(root, child, gameObjectTreeElements);
+        }
+        _mvvmPrefab.treeElements = gameObjectTreeElements;
+}
+
+void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmGameObject> gameObjectTreeElements)
+{
+
+        var childAdded = new MvvmGameObject(child.gameObject, parentElement.depth + 1, ++IDCounter);
+        gameObjectTreeElements.Add(childAdded);
+
+        foreach (Transform grandChild in child.transform)
+        {
+                AddChildrenRecursive(childAdded, grandChild, gameObjectTreeElements);
+        }
+}
+```
+插入节点是一个BFS递归的过程，主要就是新建节点，并且初始化，然后加入到list中即可。
+
+下周开始要实现背包系统和大地图城建了，感觉会更简单一些，同时也要开始正式准备秋招了。
