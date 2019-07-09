@@ -85,3 +85,10 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 插入节点是一个BFS递归的过程，主要就是新建节点，并且初始化，然后加入到list中即可。
 
 下周开始要实现背包系统和大地图城建了，感觉会更简单一些，同时也要开始正式准备秋招了。
+
+# Day 33: 07.08
+今天正式结束了Mvvm的部分，开始做背包系统的绑定，涉及lua和wrpc。记录一下昨天遇到的一个问题：
+- 在IntelliJ中打开文件夹后，并不会自动导入文件夹中子文件夹的内容，此时还需要[设置一下根目录](https://www.jetbrains.com/help/idea/content-roots.html)：
+打开文件->找到project structure->然后找到Modules->点击add content root，将根目录添加进去即可。
+
+# Day 34: 07.09

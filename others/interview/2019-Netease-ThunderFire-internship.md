@@ -104,5 +104,13 @@
 - C++智能指针是什么
 - C++虚函数表的内部结构
 - Python的符号查找，即代码中怎么去根据用户键入的字符串来找到它所表示的变量
+[Python变量查找LEGB原则](https://blog.csdn.net/baidu_35085676/article/details/79851251)
+
+    - L-Local(function)；函数内的名字空间
+    - E-Enclosing function locals；外部嵌套函数的名字空间(例如closure)
+    - G-Global(module)；函数定义所在模块（文件）的名字空间
+    - B-Builtin(Python)；Python内置模块的名字空间
+
+    当Python访问变量值时，默认LEGB查找原则，如果都找不到，则会抛出`NameError`
 - Python中的垃圾回收机制
 - 还有很多特别难的问题，记不太清了，总之面得很不好
