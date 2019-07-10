@@ -9,7 +9,50 @@
 
 ## Solution 2 : 快速选择
 ### Idea: 
-任意选择一个轴，然后将比轴大的放在轴左边，比轴小的放在轴右边。如果左边的数大于k，则继续在左边划分，否则在右边划分，找出前k-numLeft即可。
+任意选择一个轴，然后将比轴大的放在轴左边，比轴小的放在轴右边。如果左边的数大于k，则继续在左边划分，否则在右边划分。
+
+### Code:
+```c++
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int left = 0, right = nums.size() - 1, kth;
+        while (true) {
+            int idx = partition(nums, left, right);
+            if (idx == k - 1) {
+                kth = nums[idx];
+                break;
+            }
+            if (idx < k - 1) {
+                left = idx + 1;
+            } else {
+                right = idx - 1;
+            }
+        }
+        return kth;
+    }
+private:
+    // 同样可以用在快排中
+    int partition(vector<int>& nums, int left, int right) {
+        int pivot = nums[left], l = left + 1, r = right;
+        while (l <= r) {
+            // 注意这里是r--
+            if (nums[l] < pivot && nums[r] > pivot) {
+                swap(nums[l++], nums[r--]);
+            }
+            if (nums[l] >= pivot) {
+                l++;
+            }
+            if (nums[r] <= pivot) {
+                r--;
+            }
+        }
+        swap(nums[left], nums[r]);
+        return r;
+    }
+};
+```
+
 ### Complexity Analysis:
 时间复杂度为$O(n)$，因为第一次划分需要比较n个数，第二次为$O(n/2)$，渐进下就是$O(n)$，因为与快排不同，不需要遍历两支，只需要选择其中一支遍历。但最坏情况下时间复杂度仍是$O(n^2)$
 
@@ -43,7 +86,7 @@ public class TopK {
     // 建堆
     private void buildHeap (int k, int[] data)
     {
-        // ** M 向上调整，所以0不需要调整 **
+        // ** M 两层循环，向上调整，所以0不需要调整 **
         for(int i=1; i<k; i++)
         {
             int t = i;
@@ -71,30 +114,32 @@ public class TopK {
 
         //调整堆顶
         int t = 0;
-        // 左孩子需要交换
-        while(left(t)<k && data[t]> data[left(t)] ||
-        // 右孩子需要交换
-        right(t)<k && data[t] > data[right(t))
+        // 左孩子需要交换 || 右孩子需要交换
+        while(left(t)<k && data[t]> data[left(t)] || right(t)<k && data[t] > data[right(t)])
+        
         {
-            // 将三者最小的换到最上面
-            // 如果左边最小
+            // 这里特别容易错
+            // 首先，如果进到这里，left(t)一定是小于k，且一定有孩子要被交换
+            // 其次，我们默认交换左孩子，但如果要交换右孩子，条件为
+            // 右孩子下标小于k，并且右孩子小于左孩子
             // ** M 判断条件 **
-            if(left(t)<k && data[left(t)]<data[right(t)]
-            {
-                // swap data[left(t)] and data[t]
-                temp = data[left(t)];
-                data[left(t)] = data[t];
-                data[t] = temp;
-                t = left(t);
-            }
-            // 如果右边最小
-            else
+            if(right(t) <k && data[right(t)]<data[left(t)])
             {
                 // swap data[right(t)] and data[t]
                 temp = data[right(t)];
                 data[right(t)] = data[t];
                 data[t] = temp;
                 t = right(t);
+            }
+            // 否则交换左孩子
+            else
+            {
+                // swap data[left(t)] and data[t]
+                temp = data[left(t)];
+                data[left(t)] = data[t];
+                data[t] = temp;
+                t = left(t);
+
             }            
         }
     }
@@ -127,4 +172,5 @@ public class TopK {
 - 构建堆时，是对前k个元素都进行调整
 - 调整堆时，只对堆顶元素进行调整（`data[0]`）
 
-
+### Complexity Analysis:
+K个数建堆的复杂度为$O(k)$，之后调整一次的复杂度为$O(logk)$，大致执行n次，所以总的时间复杂度为$O(n*logk)$
