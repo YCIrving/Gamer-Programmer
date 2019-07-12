@@ -91,4 +91,15 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 - 在IntelliJ中打开文件夹后，并不会自动导入文件夹中子文件夹的内容，此时还需要[设置一下根目录](https://www.jetbrains.com/help/idea/content-roots.html)：
 打开文件->找到project structure->然后找到Modules->点击add content root，将根目录添加进去即可。
 
-# Day 34: 07.09
+# Day 34: 07.12
+1. 今天学习了一下界面绑定时，如何在Unity中更新美术资源：
+
+    - 首先更新表格，刷新wrpc和wdsync
+    - Unity中，点击Window->Asset Management->Addressable Assets，打开Addressables窗口，并将其移动到Scene和Game标签里
+    - 把美术新增的prefab拖动到UIPrefabs中，并点击简化名称
+    - 如果美术新增了贴图，在同目录下新建一个`Sprite Atlas`，与贴图文件夹同名，然后将贴图文件夹拖动到这个Atlas下，点击一下pack preview，最后将atlas拖动到UISprite中，简化名称，保存。
+    ![Img](assets/unity-create-prefab&atlas.png)
+
+2. 如果Unity在Hierachy中修改了prefab，则需要在Inspector中选择Apply all。
+
+3. 在Console中，点击Collapse，可以将相同的错误折叠，方便观察其他错误。
