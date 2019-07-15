@@ -103,3 +103,6 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 2. 如果Unity在Hierachy中修改了prefab，则需要在Inspector中选择Apply all。
 
 3. 在Console中，点击Collapse，可以将相同的错误折叠，方便观察其他错误。
+
+# Day 35: 07.13
+1. 查看Prefab在场景中的显示，可以将其拖动只Hierachy层级下的UIRoot中
