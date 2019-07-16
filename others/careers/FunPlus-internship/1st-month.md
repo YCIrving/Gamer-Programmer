@@ -30,7 +30,14 @@
 
 ## Terminal转化表格
 
-在`wod-shared`目录下运行`./conv.sh all`命令即可
+- 首先下载安装item2，替换Mac上的Terminal
+
+- 之后在item2中运行`brew install protobuf`
+
+- 
+- 在`/Users/ycirving/Work/wod-client/tools`路径下配置`wod-config-path`和`wod-share-path`为自己的路径，然后运行`./_refresh_wdsync_lua.sh`和`./_refresh_wrpc_lua.sh`来刷新wrpc和wdsync
+
+- 在`/Users/ycirving/Work/wod-shared`目录配置`local.js`，之后运行`./conv.sh all`来更新表格
 
 ## IntelliJ与Unity的协作
 
