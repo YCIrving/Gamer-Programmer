@@ -90,7 +90,8 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 # Day 33: 07.08
 今天正式结束了Mvvm的部分，开始做背包系统的绑定，涉及lua和wrpc。记录一下昨天遇到的一个问题：
 - 在IntelliJ中打开文件夹后，并不会自动导入文件夹中子文件夹的内容，此时还需要[设置一下根目录](https://www.jetbrains.com/help/idea/content-roots.html)：
-打开文件->找到project structure->然后找到Modules->点击add content root，将根目录添加进去即可。
+打开文件->找到project structure->然后找到Modules->点击add content root，将根目录添加进去即可，然后记得选择"Mark as Sources"。
+    ![img](assets/Intellij-root-dictionary.png)
 
 # Day 34: 07.12
 1. 今天学习了一下界面绑定时，如何在Unity中更新美术资源：
@@ -117,9 +118,12 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 
     ![img](assets/SourceTree-right-branch.png)
 
-4. Intellij IDEA 中调试Lua代码
+4. Intellij IDEA 中调试Lua代码:
+    - 首先设置项目的根目录（与Day 33中一致）
+    - 在Debug中选择配置，添加远程调试器
+    ![img](assets/IntelliJ-remote-debug.png)
+    - 每次开始调试，只能运行一次Unity，第二次运行Unity之前，需要重新开始调试，否则会卡住
 
-第二次调试会崩掉
-
-# Day :
+# Day 36: 07.18
 1. IntelliJ中，使用Shift+Delete，可以删除一整行。
+2.  
