@@ -207,7 +207,7 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：当出现类的等号赋�
     ```
 
 ## C/C++中的内存布局
-![img](assets/memory-layout-c.jpg)
+![img](assets/memory-layout-C.jpg)
 - 内存分为五个部分
     - 代码区(Text segment)：存放CPU执行的机器指令（machine instructions）。通常，代码区是可共享的（即另外的执行程序可以调用它），因为对于频繁被执行的程序，只需要在内存中有一份代码即可。代码区通常是只读的，使其只读的原因是防止程序意外地修改了它的指令。另外，代码区还规划了局部变量的相关信息。
     - 未初始化数据区（Uninitialized Data Segment）：亦称BSS区（uninitialized data segment），存入的是全局未初始化变量。BSS这个叫法是根据一个早期的汇编运算符而来，这个汇编运算符标志着一个块的开始。BSS区的数据在程序开始执行之前被内核初始化为0或者空指针（NULL）。例如一个不在任何函数内的声明：
