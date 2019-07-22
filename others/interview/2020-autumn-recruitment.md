@@ -81,8 +81,13 @@
 # 网易游戏校园招聘
 ![netease1](assets/2020-Netease1.jpg)
 ![netease2](assets/2020-Netease2.jpg)
+![netease](assets/2020-Netease-mock-exam.jpg)
 
 1. 6.30投递简历，两个志愿，一个客户端一个图形渲染。
+
+# 网易游戏雷火事业群
+![img](assets/2020-Netease-ThunderFire.jpg)
+1. 7.15投递简历，游戏研发工程师(客户端方向)
 
 # 阿里互娱微光计划
 （了解一下基本岗位，貌似只能内推，所以没投）
