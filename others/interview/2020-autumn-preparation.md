@@ -1,7 +1,7 @@
 # 自我介绍
-- 面试官您好！我叫高宜琛，本科就读于大连理工大学软件学院软件工程专业，现在是北京大学信息科学与技术系计算机应用的一名研二学生，毕业时间是2020年7月。
-- 实验室方面，自己的研究方向主要是计算机字体的生成和压缩，完成了使用深度学习和传统图形学方法结合，通过用户输入的少量字符集，来生成完整矢量字库的任务，目前该成果计划投稿至Siggraph Asia 2019。
-- 跟游戏相关的项目，第一是本科期间使用unity做过一些小的Demo，第二是从6月份开始，在Funplus公司实习，做游戏客户端的开发，项目是一个SLG和COC结合的手游，截止到目前完成了3个feature，包括地图编辑器功能的增加和优化、Unity编辑器的资源锁、预置体的树形结构展示等。目前正在做的是游戏中的背包系统，目的是能够使用wrpc实现服务器端数据和客户端UI界面的绑定，比如背包中物品的数量等。
+- 面试官您好！我叫高宜琛，本科就读于大连理工大学软件学院，专业为软件工程，现在是北京大学信息科学与技术系计算机应用专业的一名研二学生，毕业时间是2020年7月。
+- 实验室方面，自己的研究方向主要是计算机字库的生成和压缩，完成了使用深度学习和传统图形学方法结合，通过用户输入的少量字符集，来生成完整矢量字库的任务，目前该成果计划投稿至Siggraph Asia 2019 Technical Briefs。
+- 跟游戏相关的项目，第一是本科期间使用unity做过一些小的Demo，第二是从6月份开始，在北京Funplus公司实习，做游戏客户端的研发，项目是一个SLG和COC结合的手游，截止到目前完成了若干个feature，包括地图编辑器功能的增加和优化、Unity编辑器的资源锁、prefab的树形结构展示等。目前正在做的是游戏中的背包系统和城建系统，目的是能够使用wrpc实现服务器端数据和客户端UI界面的绑定，比如背包中物品的数量，主城中建筑物的显示等。
 - 之所以来应聘游戏岗位，最重要的原因是对于游戏和游戏开发的热情和兴趣，从小就觉得游戏带给了自己很多欢乐和感动，很希望能够投入到其中，给别人带来同样的感受。虽然自己可能游戏开发技术栈方面的积累不如数字媒体或图形学专业的同学强，但自己的学习能力和热情能够弥补这方面的不足，我自己很有信心能够胜任游戏开发这一职位。
 
 # 渲染管线
@@ -60,6 +60,22 @@
 - Lua 是一种轻量小巧的**脚本语言**，用**标准C语言**编写并以源代码形式开放， 其设计目的是为了**嵌入应用程序**中，从而**为应用程序提供灵活的扩展和定制功能**。
 - 八种基本数据类型：nil、boolean、number、string、function、userdata、thread、table.
 - 语句组(chunk)和语句块(block)的[区别](https://stackoverflow.com/questions/12119846/whats-the-difference-between-chunk-and-block-in-lua):一个chunk是一系列顺序执行的语句，chunk之间的运行是相互独立的，可以理解为一个函数；一个block仅仅是一系列语句，因此所有的chunk都是block，但不是所有的block都是chunk.
+
+# Unity
+## Untiy中的Monobehaviour有哪些
+```c#
+Start()
+Update()
+FixedUpdate()
+LateUpdate()
+OnGUI()
+OnDisable()
+OnEnable()
+```
+
+## UGUI和NGUI的区别
+![img](assets/ugui-ngui-comparison.png)
+
 
 # C++
 
@@ -423,6 +439,57 @@ int main()
 - 通过this给该空间添加属性和方法（执行构造函数）；
 
 - 把this返回给外部变量；
+
+## C++中new失败的处理
+
+- C语言中，使用 malloc/calloc 等分配内存的函数时，一定要检查其返回值是否为“空指针”（亦即检查分配内存的操作是否成功），这是良好的编程习惯，也是编写可靠程序所必需的。但是，如果你简单地把这一招应用到 new 上，那可就不一定正确了。我经常看到类似这样的代码：
+    ```c++
+    int* p = new int[SIZE];
+    if ( p == 0 ) // 检查 p 是否空指针
+        return -1;
+    // 其它代码
+    ```
+    其实，这里的 if ( p == 0 ) 完全是没啥意义的。
+
+- C++ 里，如果 new 分配内存失败，默认是**抛出异常**(`bad_alloc`)的。所以，如果分配成功，p == 0 就绝对不会成立；而如果分配失败了，也不会执行 if ( p == 0 )，因为分配失败时，new 就会**抛出异常跳过后面的代码**。如果你想检查 new 是否成功，应该**捕捉异常**：
+
+    ```c++
+    try {
+        int* p = new int[SIZE];
+        // 其它代码
+    } catch ( const bad_alloc& e ) {
+        return -1;
+    }
+    ```
+
+- 当然，标准 C++ 亦提供了一个方法来抑制 new 抛出异常，而返回空指针
+
+    ```c++
+    int* p = new (std::nothrow) int; // 这样如果 new 失败了，就不会抛出异常，而是返回空指针
+    if ( p == 0 ) // 如此这般，这个判断就有意义了
+        return -1;
+    // 其它代码
+    ```
+
+- 除了捕捉异常外，还有一种方法可以处理new失败的情况，那就是重新申请，使用`set_new_handler`函数处理new失败。`set_new_handler`的输入参数是operator new分配内存失败时要调用的出错处理函数的指针，返回值是set_new_handler没调用之前就已经在起作用的旧的出错处理函数的指针。可以像下面这样使用`set_new_handler`：
+    ```c++
+    void nomorememory()
+    {
+    cerr << "unable to satisfy request for memory\n";
+    abort();
+    }
+    int main()
+    {
+    set_new_handler(nomorememory);
+    int *pbigdataarray = new int[100000000];
+    ...
+    ```
+- operator new不能满足内存分配请求时，new-handler函数不只调用一次，而是不断重复，直至找到足够的内存。一个设计得好的new-handler函数必须实现下面功能中的一种:
+    - 产生更多的可用内存。这将使operator new下一次分配内存的尝试有可能获得成功。实施这一策略的一个方法是：在程序启动时分配一个大的内存块，然后在第一次调用new-handler时释放。释放时伴随着一些对用户的警告信息，如内存数量太少，下次请求可能会失败，除非又有更多的可用空间。
+    - 安装另一个不同的new-handler函数。如果当前的new-handler函数不能产生更多的可用内存，可能它会知道另一个new-handler函数可以提供更多的资源。这样的话，当前的new-handler可以安装另一个new-handler来取代它(通过调用set_new_handler)。下一次operator new调用new-handler时，会使用最近安装的那个。(这一策略的另一个变通办法是让new-handler可以改变它自己的运行行为，那么下次调用时，它将做不同的事。方法是使new-handler可以修改那些影响它自身行为的静态或全局数据。)
+    - 卸除new-handler。也就是传递空指针给set_new_handler。没有安装new-handler，operator new分配内存不成功时就会抛出一个标准的std::bad_alloc类型的异常。
+    - 抛出std::bad_alloc或从std::bad_alloc继承的其他类型的异常。这样的异常不会被operator new捕捉，所以它们会被送到最初进行内存请求的地方。(抛出别的不同类型的异常会违反operator new异常规范。规范中的缺省行为是调用abort，所以new-handler要抛出一个异常时，一定要确信它是从std::bad_alloc继承来的。)
+    - ·没有返回。典型做法是调用abort或exit。abort/exit可以在标准c库中找到(还有标准c++库)。
 
 ## 强制类型转换运算符
 - static_cast：用于非多态类型的转换
