@@ -1,8 +1,6 @@
-## Solution 1: Brute force
+## Solution 1:
 
 ### Idea: 
-
-使用两个变量进行遍历，直到满足条件为止。
 
 ### Code: 
 
@@ -12,13 +10,13 @@
 
 ### Complexity Analysis: 
 
-- Time complexity : $O(n^2)$. 
-- Space complexity : $O(1)$. 
+- Time complexity : $O(n)$. 
+- Space complexity : $O(n)$. 
 
 ### Details:
 
-> Runtime: 148 ms, faster than 27.61% of C++ online submissions.
+> Runtime: 0 ms, faster than 0.0% of C++ online submissions.
 >
-> Memory Usage: 9.2 MB, less than 99.94% of C++ online submissions.
+> Memory Usage: 0.0 MB, less than 0.0% of C++ online submissions.
 
 ### Rethinking:

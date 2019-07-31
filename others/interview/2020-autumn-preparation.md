@@ -655,6 +655,115 @@ A和B的定义和调用都放在一个文件中肯定是不可以的，这样就
 
     即dynamic_cast执行安全的向下转换:`dynamic_cast<new_type> (expression)`,在执行downcast时，如果expression实际指向的类型与new_type一致，转换才能成功，否则转换失败。  
 
+## 重写cout类
+
+今天被同学问了这样一道题，需要实现一个自定义标准输出对象，mycout。要求：
+
+- 对常用类型，如int、char、double等支持"<<"操作符
+- 支持操作符"<<"的连续调用，如`mycout<<a<<b;`
+- 支持复数类ComplexNumber的输出，形式为`3+4i`
+- 支持输出换行符`endl`
+
+上网搜了一下，主要是endl支持比较复杂，因为`std::endl`本质上是一个函数，前三个条件很好满足。代码如下：
+```c++
+#include <iostream>
+
+// 复数类
+class ComplexNumber
+{
+public:
+    ComplexNumber(int real,int imaginary)
+            :m_real(real),m_imaginary(imaginary){}
+    int getReal()const {
+        return m_real;
+    }
+    int getImaginary()const {
+        return m_imaginary;
+    }
+
+private:
+    int m_real;
+    int m_imaginary;
+};
+
+
+struct MyCout
+{
+    // 普通输出
+    template <typename T>
+    MyCout& operator<<(const T& x)
+    {
+        std::cout << x;
+
+        return *this;
+    }
+
+
+    // 输出复数
+    MyCout& operator<<(ComplexNumber const & x)
+    {
+        std::cout<<x.getReal()<<'+'<< x.getImaginary() << 'i';
+
+        return *this;
+    }
+
+
+    // 定义自己的endl
+    // function that takes a custom stream, and returns it
+    typedef MyCout& (*MyCoutManipulator)(MyCout&);
+
+    // take in a function with the custom signature
+    MyCout& operator<<(MyCoutManipulator manip)
+    {
+        // call the function, and return it's value
+        return manip(*this);
+    }
+
+    // define the custom endl for this stream.
+    // note how it matches the `MyStreamManipulator`
+    // function signature
+    static MyCout& endl(MyCout& mycout)
+    {
+        // print a new line
+        std::cout << std::endl;
+
+        // do other stuff with the stream
+        // std::cout, for example, will flush the stream
+        mycout << "Called MyStream::endl!" << std::endl;
+
+        return mycout;
+    }
+
+    // 输出std::endl
+    // this is the type of std::cout
+    typedef std::basic_ostream<char, std::char_traits<char> > CoutType;
+
+    // this is the function signature of std::endl
+    typedef CoutType& (*StandardEndLine)(CoutType&);
+
+    // define an operator<< to take in std::endl
+    MyCout& operator<<(StandardEndLine manip)
+    {
+        // call the function, but we cannot return it's value
+        manip(std::cout);
+
+        return *this;
+    }
+};
+
+int main(void)
+{
+    MyCout mycout;
+    mycout << 24<<'>'<<23<<std::endl;
+    mycout << "This is a string!";
+    mycout << std::endl;
+    ComplexNumber n(10,5);
+    mycout<< n;
+    return 0;
+}
+```
+
+上面的代码中，仅需要重载实现第一个参数为x的函数，就可以实现对"<<"的支持，而且还支持连续输出。
 
 # 数据结构
 
