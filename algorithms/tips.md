@@ -32,3 +32,32 @@
     }
     ```
 
+## 循环
+- 写循环时遇到的一个问题，就是在循环体中修改循环变量，这时要用while而不是for，比如在一个字符串压缩的问题，要在一个字符串中找到一个字符连续出现的次数([报数问题](LeetCode/problems/38.count-and-say.md))
+```c++
+string stringParser(string s)
+{
+    string ret;
+    int num;
+    char c;
+    int i=0, j;
+    // *M* 对于修改循环变量的循环，用while而不要用for
+    while(i<s.length())
+    {
+        c = s[i];
+        num = 1;
+        for(j = i+1; j<s.length(); j++)
+        {
+            if(s[j] == c) num++;
+            else break;
+        }
+        // *M* 循环体内修改循环变量
+        i=j;
+        // *M* 这里不能用append()，因为append中的参数应该是字符串类型，而不是char
+        ret.push_back('0'+num);
+        ret.push_back(c);
+    }
+    return ret;
+}
+```
+
