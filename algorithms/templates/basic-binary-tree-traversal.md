@@ -249,4 +249,107 @@
     ```
 
 - 分层层次遍历：
-具体参考[LeetCode102](../LeetCode/problems/102.binary-tree-level-order-traversal.md)
+
+    具体参考[LeetCode102](../LeetCode/problems/102.binary-tree-level-order-traversal.md)
+
+    - 递归方法：
+        ```c++
+        class Solution {
+        public:
+            void levelOrderTraversalRecursive(TreeNode* root, int level, vector<vector<int>> &ret)
+            {
+                if(!root) return;
+                // *M* 注意level和size之间的关系
+                // *M* 入栈时可以直接压入一个"{}"来达到空vector的目的
+                if(ret.size()<level+1) ret.push_back({});
+                // 整个过程就是先序遍历的递归形式
+                ret[level].push_back(root->val);
+                levelOrderTraversalRecursive(root->left, level+1, ret);
+                levelOrderTraversalRecursive(root->right, level+1, ret);
+            }
+            vector<vector<int>> levelOrder(TreeNode* root) {
+                vector<vector<int>> ret;
+                levelOrderTraversalRecursive(root, 0, ret);
+                return ret;
+            }
+        };
+        ```
+    
+    - 双队列非递归：
+        ```c++
+        class Solution {
+        public:
+            vector<vector<int>> levelOrder(TreeNode* root) {
+                if(!root) return {};
+                queue<TreeNode*> que1, que2;
+                vector<vector<int>> ret;
+                TreeNode* cur = root;
+                que1.push(cur);
+                // *M* 注意循环条件
+                while(!que1.empty() || !que2.empty())
+                {
+                    // *M* 新增一层
+                    ret.push_back({});
+                    // *M* 将不为空的队列进行出队，然后将其子节点压入另外一个队列即可
+                    // *M* 需要注意的是下面两个条件是互斥的，每次处理一个队列，所以外层的判断不能省略
+                    if(!que1.empty())
+                    {
+                        while(!que1.empty())
+                        {
+                            cur = que1.front();
+                            que1.pop();
+                            ret[ret.size()-1].push_back(cur->val);
+                            if(cur->left) que2.push(cur->left);
+                            if(cur->right) que2.push(cur->right);
+                        }
+                    }
+                    else
+                    {
+                        while(!que2.empty())
+                        {
+                            cur = que2.front();
+                            que2.pop();
+                            ret[ret.size()-1].push_back(cur->val);
+                            if(cur->left) que1.push(cur->left);
+                            if(cur->right) que1.push(cur->right);
+                        }
+                    }
+
+                }
+                return ret;
+            }
+        };
+        ```
+
+        单队列非递归：
+        ```c++
+        class Solution {
+        public:
+            vector<vector<int>> levelOrder(TreeNode* root) {
+                if(!root) return {};
+                vector<vector<int>> ret;
+                queue<TreeNode*> que;
+                TreeNode* cur;
+                que.push(root);
+                // *M* 该方法是两层循环嵌套的形式
+                while(!que.empty())
+                {
+                    // *M* 记录下当前层有多少个节点
+                    int queSize = que.size();
+                    // *M* 获得当前处理的层数
+                    int level = ret.size();
+                    ret.push_back({});
+                    // *M* 每次处理一层的节点，里面的内容与简单层次遍历相同
+                    for(int i=0; i<queSize; i++)
+                    {
+                        cur = que.front();
+                        que.pop();
+                        ret[level].push_back(cur->val);
+                        if(cur->left) que.push(cur->left);
+                        if(cur->right) que.push(cur->right);
+                    }
+                }
+                return ret;
+            }
+        };
+        ```
