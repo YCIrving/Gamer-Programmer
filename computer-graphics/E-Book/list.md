@@ -1,0 +1,6 @@
+- Graphics Gems:book
+- 腾讯游戏开发精粹
+- Game Engine Architecture
+- Real-Time Rendering
+- Foundations of phusically based modeling & animation
+- GDC
