@@ -100,9 +100,10 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
     - Unity中，点击Window->Asset Management->Addressable Assets，打开Addressables窗口，并将其移动到Scene和Game标签里
     - 把美术新增的prefab拖动到UIPrefabs中，并点击简化名称
     - 如果美术新增了贴图，在同目录下新建一个`Sprite Atlas`，与贴图文件夹同名，然后将贴图文件夹拖动到这个Atlas下，点击一下pack preview，最后将atlas拖动到UISprite中，简化名称，保存。
-    ![Img](assets/unity-create-prefab&atlas.png)
+    ![Img](assets/Unity-create-prefab&atlas.png)
 
 2. 如果Unity在Hierarchy中修改了prefab，则需要在Inspector中选择Overrides -> Apply all，这里需要注意，如果修改的是子节点，则不存在Overrides按钮，此时需要回到父节点，然后才能找到Overrides。(也可以直接从Hierarchy中将prefab拖回到Project中)
+
     ![img](assets/prefab-overrides.png)
 
 
