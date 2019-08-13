@@ -259,6 +259,11 @@ int main()
 # IGG
 
 # 快手
+
+![img](assets/2020-Kuaishou.jpg)
+![img](assets/2020-Kuaishou2.jpg)
+![img](assets/2020-Kuaishou3.jpg)
+
 8.13 投递简历，并找人内推：
 [投递链接](https://campus.kuaishou.cn/recruit/campus/e/#/campus/index/)
 
