@@ -154,9 +154,9 @@
 
 笔试时间：统一笔试共5次，分别是7月28日、8月11日、8月25日、9月8日、9月22日，笔试前1-3个工作日会发送笔试邀请，请耐心等待邮件和短信通知。部分职位的笔试时间可能有调整，具体时间以收到的邮件和短信通知为准。
 
-内推码：
+内推码：ZKTKBDR
 
-准备面完网易再来投这个
+- 8.13 官网投递了上海的岗位，发现北京目前只剩下一个引擎研发，所以投了上海的游戏研发
 
 # 阿里巴巴
 
@@ -218,18 +218,33 @@ int main()
 3. 有n个文件，需要动态返回最近使用的k个文件，文件按文件名索引，时间用时间戳表示。
 
 # 搜狐畅游
-8.1 申请了C++和U3D开发工程师两个职位，http://www.changyou.com/index.shtml
-
-# 西山居
-未开始，但可以内推
-
-# 盛趣游戏
-未开始，但可以内推
+- 8.13 打算申请C++和U3D开发工程师两个职位，[投递链接](http://zhaopin.changyou.com/wt/changyou/web/index/campus)，但现实我已经申请过了，不让再申请了。
 
 # 完美世界
 未开始，但可以内推
 
+[内推链接](https://www.nowcoder.com/careers/pwrd/6040?source=5992C001305F117D443FC85CDB90BABC213CE488DB49A380&type=neitui&ncsr=)
+
+[网申链接](http://campus.wanmei.com/job.html)
+
 ![img](assets/2020-PerfectWorld-Internal-Referral.jpg)
+
+- 8.13从内推链接里投递了两个职位：游戏C++开发工程师、C++客户端开发工程师（互联网业务）
+
+# 西山居
+![img](assets/2020-Xishanju.jpg)
+![img](assets/2020-Xishanju2.jpg)
+
+[职位链接](https://hr.xishanju.com/school-job.html?typeId=1&t=1&page_list=2)，应聘客户端开发工程师。简单粗暴，直接发邮件：
+发送电子版简历＋作品，至xsj_bjhr@kingsoft.com邮箱
+邮件标题及简历命名格式：【应聘岗位】+姓名+学校
+如 【客户端开发工程师】+高宜琛+北京大学
+
+
+# 盛趣游戏
+[公众号推送链接](https://mp.weixin.qq.com/s/ido5IoNopDjGoC_BCH86QA)
+[网申链接](http://recruit.shengqugames.com/2020/index.html#slide2)
+- 8.13 手机验证码登录，投递了两个职位，U3D和UE4客户端开发工程师。
 
 # 猎豹移动
 
@@ -241,5 +256,10 @@ int main()
 
 # 尚游
 
+# IGG
+
+# 快手
+8.13 投递简历，并找人内推：
+[投递链接](https://campus.kuaishou.cn/recruit/campus/e/#/campus/index/)
 
 
