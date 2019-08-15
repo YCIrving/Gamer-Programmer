@@ -167,3 +167,146 @@ return BindGrid
             end
         end        
         ```
+
+# Day 47-52: 08.06 - 08.10
+
+最近实现了一个按钮长按的功能，现在记录一下：
+
+- 首先在UI的脚本中增加一个LongPressButton：
+    ```c#
+    using UnityEngine;
+    using UnityEngine.Events;
+    using UnityEngine.EventSystems;
+    using UnityEngine.UI;
+
+    namespace Wod.UI.Ext
+    {
+        public class LongPressButton : Button
+        {
+            private bool _pressing = false;
+
+            //[SerializeField]
+            public float PressTimeThreshold;
+            private float _pressTime;
+            public UnityEvent onLongPressed;
+
+            public override void OnPointerDown(PointerEventData eventData)
+            {
+                _pressing = true;
+                _pressTime = 0;
+            }
+
+            public override void OnPointerUp(PointerEventData eventData)
+            {
+                _pressing = false;
+            }
+
+            private void Update()
+            {
+                if (_pressing)
+                {
+                    _pressTime += Time.deltaTime;
+                    if(_pressTime > PressTimeThreshold)
+                        onLongPressed.Invoke();
+                }
+            }
+        }
+    }
+    ```
+    可以看到它继承自Button，所以同样有OnClick()事件。
+
+- 为了将其设置为一个通用的插件，还需要在Editor的脚本中增加其对应的Editor，以控制其在Inspector中的显示
+
+    ```c#
+    using UnityEditor;
+    using UnityEditor.Experimental.UIElements;
+    using UnityEditor.UI;
+    using UnityEngine;
+
+    namespace Wod.UI.Ext
+    {
+        [CustomEditor(typeof(LongPressButton))]
+        public class LongPressButtonEditor : ButtonEditor
+        {
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+                
+                LongPressButton myLongPressButton = (LongPressButton)target;
+                myLongPressButton.PressTimeThreshold = EditorGUILayout.FloatField("按压时间阈值（秒）", myLongPressButton.PressTimeThreshold);
+            }
+        }
+    }
+    ```
+    这样就可以在Inspector中看到如下界面，可以将按压时间作为一个值来单独设置：
+
+    ![img](assets/Unity-long-press-button.png)
+
+- 之后我们给需要长按的按钮挂上Long Press Button的脚本，并在Lua中声明为：
+    ```Lua
+    ---@type Wod.UI.Ext.LongPressButton
+    ```
+    注意，此时需要重新将C#代码进行一次生成，导出最后的Lua代码，方法为在Unity中的XLua中，先选择Clear Generated Code，然后选择Generate Code即可。
+
+- 最后我们在Lua中，给按钮加上监听器，监听其`onLongPressed`事件，`self._btnPlus.onLongPressed:AddListener(CT.BagCtrl.OnLongPressBtnPlus)`，这样就能支持像正常`onClick`事件一样写函数了。
+
+# Day 53: 08.11
+
+记录一个修改prefab时的坑：
+
+- 在对Prefab中挂在的Lua Behaviour进行控件绑定时，需要将prefab拖动到UIRoot下进行，如果直接打开Prefab，然后绑定，在重新运行时会失效。
+
+再记录一个显示方面的坑：
+
+- 有时需要显示一个界面或者tips，如果在game中发现没有成功显示，此时首先打开scene界面，看scene中是否存在该物体，如果没找到，则回到Hierarchy中，看能否找到对应的物体。因为有时game中没有不代表没有被初始化，也有可能是位置错误或层级错误，导致没有显示在屏幕上。
+
+# Day 54-58: 08.12 - 08.16
+好久没更新了，最近实现了背包2.0的全部功能，遗留的都是目前无法实现的功能，也算给三个月的实习一个比较好的交代了吧。
+
+- Jira
+    ![img](assets/wod-jira.png)
+
+- Map Editor
+
+    ![img](assets/wod-map-editor.png)
+    ![img](assets/wod-map-editor2.png)
+    ![img](assets/wod-map-editor3.png)
+
+    - 多选功能：同时选中多个物体，并支持同时拖动和放置
+    - 一键选取功能：点击后可以选择横纵方向上最长的相同的类别的建筑
+    - 清除功能：开启后按下鼠标，可以快速删除鼠标经过位置的建筑
+    - 添加功能：开启后，选择一种建筑，按下鼠标，可以快速在鼠标经过的位置快速添加建筑
+
+- XLock
+
+    ![img](assets/wod-XLock-usage.png)
+    ![img](assets/wod-XLock-lock-failed.png)
+
+    - 使用手册：[XLock pptx](assets/wod-XLock的使用.pptx)
+    - 加锁
+    - 解锁
+    - 偷锁
+    - 查询
+
+- Prefab解析器
+
+    ![img](assets/wod-mvvm-treeviewer.png)
+
+    - IMGUI
+    - 支持拖动
+    - 能够对Prefab中的树形结构进行解析
+
+- 背包
+
+    ![img](assets/wod-bag.png)
+    ![img](assets/wod-bag2.png)
+    ![img](assets/wod-bag3.png)
+
+    - 一个自然的背包功能，将玩家的物品分类显示在不同的页签中，并支持记忆功能，即四个页签相互独立
+    - 支持服务器同步，可以使用物品，并且物品的变化可以实时反映在背包中
+    - 使用后显示动画
+    - 实现开宝箱功能，并实现点击后的提示功能
+    - 实现按钮长按功能
+
+
+

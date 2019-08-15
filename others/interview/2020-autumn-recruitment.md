@@ -221,15 +221,19 @@ int main()
 - 8.13 打算申请C++和U3D开发工程师两个职位，[投递链接](http://zhaopin.changyou.com/wt/changyou/web/index/campus)，但现实我已经申请过了，不让再申请了。
 
 # 完美世界
-未开始，但可以内推
+## 内推
+![img](assets/2020-PerfectWorld-Internal-Referral.jpg)
 
 [内推链接](https://www.nowcoder.com/careers/pwrd/6040?source=5992C001305F117D443FC85CDB90BABC213CE488DB49A380&type=neitui&ncsr=)
 
 [网申链接](http://campus.wanmei.com/job.html)
 
-![img](assets/2020-PerfectWorld-Internal-Referral.jpg)
-
 - 8.13从内推链接里投递了两个职位：游戏C++开发工程师、C++客户端开发工程师（互联网业务）
+
+## 核心舱计划
+![img](assets/2020-PerfectWorld.jpg)
+
+- 8.14 网上投递了简历
 
 # 西山居
 ![img](assets/2020-Xishanju.jpg)

@@ -176,7 +176,7 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 - 注意的细节：
     
     - 了解代码执行的先后顺序和次数是很重要的，比如那个函数会先执行，那个函数是回调，那个函数是每帧都被执行等
-    - 修改prefab可以将其拖动到UIRoot中进行编辑
+    - 修改prefab可以将其拖动到UIRoot中进行编辑，然后选择Overrides
     - prefab修改完记得拖回去应用，但存在改坏的可能，表现为不报错，无提示，但就是进不去场景
     - intelliJ每次打开都需要设置根目录，同时调试功能也比较好用，但每次调试都需要重新启动
     - lua写起来还挺简单的，不需要参数的类型，直接写就行了
