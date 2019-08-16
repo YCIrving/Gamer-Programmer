@@ -404,3 +404,15 @@ return BindGrid
 - 设置完之后，发现button的响应还是不对，这里记录一下，button中如果需要相应射线，则其中一定要挂一个图片，并将其Raycast Target打开，然后如果是button的背景图片可以直接挂在父节点上，并将其button中Target Graph属性设置为自己即可，如下图所示：
 
     ![img](assets/Unity-button-raycast.png)
+
+另外，今天换了新的版本控制软件，tower，基本功能一样，只不过拉取时要先save stash一下，拉取完成后再apply stash。配合beyond compare一起使用效果更佳
+```
+TOWER (GIT)
+(Requires Tower 2.0.5 or newer)
+Launch Beyond Compare, go to the Beyond Compare menu and run Install Command Line Tools.
+Open Tower's preferences dialog on the Git Config Tab.
+Set the Diff Tool drop-down to Beyond Compare.
+Set the Merge tool drop-down to Beyond Compare
+```
+
+[中文文档](https://www.git-tower.com/learn/git/ebook/cn/command-line/introduction)
