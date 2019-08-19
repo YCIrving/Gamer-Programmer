@@ -405,7 +405,7 @@ return BindGrid
 
     ![img](assets/Unity-button-raycast.png)
 
-另外，今天换了新的版本控制软件，tower，需要破解，基本功能一样，只不过拉取时要先save stash一下，拉取完成后再apply stash。配合beyond compare一起使用效果更佳
+另外，今天换了新的版本控制软件，tower，需要破解，基本功能一样，只不过拉取时要先save stash一下，拉取完成后再apply stash。配合beyond compare一起使用效果更佳:
 ```
 TOWER (GIT)
 (Requires Tower 2.0.5 or newer)
@@ -416,6 +416,14 @@ Set the Merge tool drop-down to Beyond Compare
 ```
 
 [中文文档](https://www.git-tower.com/learn/git/ebook/cn/command-line/introduction)
+
+使用中发现一个问题，就是拉取时会报错，显示无效的用户名或密码：
+
+![img](assets/Tower-error.png)
+
+这时主要是账户没有注册到Tower中导致的，所以需要在账户中添加自己的bitbucket账号，输入用户名即可：
+
+![img](assets/Tower-error2.png)
 
 # Day61: 08.19
 

@@ -301,6 +301,7 @@ int main()
 # 祖龙娱乐（北京）
 ## 网申
 [网申链接](http://zulongwx.tupu360.com/position/positionList?enter=menu)
+
 [网申链接2](http://zulong.tupu360.com/campus/resumeMgt/edit)
 
 - 8.19 投递了游戏开发工程师（客户端）
@@ -310,6 +311,26 @@ int main()
 北京东城区 祖龙娱乐公司
 将简历发送至：huangwanqiu@zulong.com
 2020校招直通车报名-姓名-应聘职位
+
+# Garena竞乐（上海）
+
+[网申链接](https://www.nowcoder.com/careers/Garena/6419)
+- 8.19 申请游戏客户端开发工程师，同时给hr发了邮件内推(hr@garena.cn)
+
+# 巨人网络（上海）
+
+## 内推
+- 8.19 投递游戏开发工程师岗位
+
+# 米哈游（上海）
+
+## 网申
+[网申链接](https://campus.mihoyo.com/#/)
+
+# 三七互娱（广州）
+
+## 网申
+[网申链接](http://zhaopin.37.com/index.php?m=Home&c=campus&a=post_info&id=998)
 
 # 农业银行
 本不该出现在这里……
@@ -357,4 +378,4 @@ int main()
 
 >3.第一批集中面试（北京、广州、上海、天津、成都、西安、武汉七地开展
 
-- 8.17 报名
+- 8.17 报名 [网申链接](https://career.abchina.com/)
