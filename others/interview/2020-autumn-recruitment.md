@@ -262,7 +262,7 @@ int main()
 # 盖娅游戏
 
 [网申链接](http://www.gaea.com/cn/position)
-- 8。18 直接给Hr发了邮件
+- 8.18 直接给Hr发了邮件
 
 # 莉莉丝
 ## 内推
