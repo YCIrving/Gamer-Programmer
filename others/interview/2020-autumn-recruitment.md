@@ -378,4 +378,8 @@ int main()
 
 >3.第一批集中面试（北京、广州、上海、天津、成都、西安、武汉七地开展
 
-- 8.17 报名 [网申链接](https://career.abchina.com/)
+- 8.17 报名，岗位是软件研发 [网申链接](https://career.abchina.com/)
+- 按要求准备，据说31号面试
+    1. 计算机基础扎实，熟练掌握C、C++、JAVA、C#中任意一门编程语言。 
+    2. 熟练掌握Hadoop、MySQL、PostgreSQL、MongoDB、Redis、Memcached、Cassandra、SQLite中任意一项开发和管理技术。
+    3. 了解windows、unix、linux等主流操作系统原理，了解一种或多种数据库。
