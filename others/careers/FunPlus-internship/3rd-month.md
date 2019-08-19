@@ -405,7 +405,7 @@ return BindGrid
 
     ![img](assets/Unity-button-raycast.png)
 
-另外，今天换了新的版本控制软件，tower，基本功能一样，只不过拉取时要先save stash一下，拉取完成后再apply stash。配合beyond compare一起使用效果更佳
+另外，今天换了新的版本控制软件，tower，需要破解，基本功能一样，只不过拉取时要先save stash一下，拉取完成后再apply stash。配合beyond compare一起使用效果更佳
 ```
 TOWER (GIT)
 (Requires Tower 2.0.5 or newer)
@@ -416,3 +416,7 @@ Set the Merge tool drop-down to Beyond Compare
 ```
 
 [中文文档](https://www.git-tower.com/learn/git/ebook/cn/command-line/introduction)
+
+# Day61: 08.19
+
+今天跟Hr提了离职，三个月的实习也算正式结束啦。
