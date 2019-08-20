@@ -309,122 +309,136 @@ return BindGrid
     - 实现按钮长按功能
 
 # Day59-60: 08.17 - 08.18
-今天又踩了一个坑，是关于射线穿透的：
+- 今天又踩了一个坑，是关于射线穿透的：
 
-- 首先，在背包中开宝箱得到的物品列表中，点击物品有一个tips显示，现在需要实现如下三个功能：
-    - 点击其他物品能直接在新的位置显示新的tips；
-    - 点击界面上的领取按钮，不论是否有tips，都能直接将界面关闭；
-    - 点击界面上其余的空白界面，能够将tips关闭。
+    - 首先，在背包中开宝箱得到的物品列表中，点击物品有一个tips显示，现在需要实现如下三个功能：
+        - 点击其他物品能直接在新的位置显示新的tips；
+        - 点击界面上的领取按钮，不论是否有tips，都能直接将界面关闭；
+        - 点击界面上其余的空白界面，能够将tips关闭。
 
-- 实现的思路如下：
-    - 打开tips时，其附带一个透明的全屏背景，可以接受鼠标点击事件
-    - 当鼠标再次点击时，获得一系列点击事件，第一个事件一定是透明背景，用来将tips关掉
-    - 之后遍历所有的事件，我们这里选择向下穿透一层，选择第一个不等于全屏背景的事件进行执行
-    - 这样就能实现点击新的物品或者按钮，能够按照需求的逻辑走
+    - 实现的思路如下：
+        - 打开tips时，其附带一个透明的全屏背景，可以接受鼠标点击事件
+        - 当鼠标再次点击时，获得一系列点击事件，第一个事件一定是透明背景，用来将tips关掉
+        - 之后遍历所有的事件，我们这里选择向下穿透一层，选择第一个不等于全屏背景的事件进行执行
+        - 这样就能实现点击新的物品或者按钮，能够按照需求的逻辑走
 
-- 控制射线穿透的代码如下：
+    - 控制射线穿透的代码如下：
 
-    ```c#
-    // TipsPointerUpDownListener.cs
-    using System.Collections.Generic;
-    using ModelShark;
-    using UnityEngine;
-    using UnityEngine.EventSystems;
-    using Wod.ThirdParty.Util;
-    using Wod.UI.ModelShark;
-    using XLua;
+        ```c#
+        // TipsPointerUpDownListener.cs
+        using System.Collections.Generic;
+        using ModelShark;
+        using UnityEngine;
+        using UnityEngine.EventSystems;
+        using Wod.ThirdParty.Util;
+        using Wod.UI.ModelShark;
+        using XLua;
 
-    namespace Wod.UI.Ext
-    {
-        public class TipsPointerUpDownListener : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IRecyclable
+        namespace Wod.UI.Ext
         {
-            public LuaFunction onup,ondown;
-            public void OnPointerDown(PointerEventData eventData)
+            public class TipsPointerUpDownListener : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IRecyclable
             {
-                if (ondown != null)
-                    ondown.Call(eventData);
-                
-                TooltipManager.Instance.HideAll();
-                PassEvent(eventData,ExecuteEvents.pointerDownHandler);
-            }
-
-            public void OnPointerUp(PointerEventData eventData)
-            {
-                if (onup != null)
-                    onup.Call(eventData);
-                
-                PassEvent(eventData,ExecuteEvents.pointerUpHandler);
-                
-            }
-            void OnDestroy()
-            {
-                Recycle();
-            }
-            public void Recycle()
-            {
-                if (onup != null)
-                    onup.Dispose();
-                
-                if (ondown != null)
-                    ondown.Dispose();
-                
-                this.enabled = false;
-            }
-        
-            //把事件透下去
-            public void  PassEvent<T>(PointerEventData data,ExecuteEvents.EventFunction<T> function)
-                where T : IEventSystemHandler
-            {
-                List<RaycastResult> results = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(data, results);
-                GameObject current = data.pointerCurrentRaycast.gameObject ;
-                for(int i =0; i< results.Count;i++)
+                public LuaFunction onup,ondown;
+                public void OnPointerDown(PointerEventData eventData)
                 {
-                    if(current!= results[i].gameObject)
+                    if (ondown != null)
+                        ondown.Call(eventData);
+                    
+                    TooltipManager.Instance.HideAll();
+                    PassEvent(eventData,ExecuteEvents.pointerDownHandler);
+                }
+
+                public void OnPointerUp(PointerEventData eventData)
+                {
+                    if (onup != null)
+                        onup.Call(eventData);
+                    
+                    PassEvent(eventData,ExecuteEvents.pointerUpHandler);
+                    
+                }
+                void OnDestroy()
+                {
+                    Recycle();
+                }
+                public void Recycle()
+                {
+                    if (onup != null)
+                        onup.Dispose();
+                    
+                    if (ondown != null)
+                        ondown.Dispose();
+                    
+                    this.enabled = false;
+                }
+            
+                //把事件透下去
+                public void  PassEvent<T>(PointerEventData data,ExecuteEvents.EventFunction<T> function)
+                    where T : IEventSystemHandler
+                {
+                    List<RaycastResult> results = new List<RaycastResult>();
+                    EventSystem.current.RaycastAll(data, results);
+                    GameObject current = data.pointerCurrentRaycast.gameObject ;
+                    for(int i =0; i< results.Count;i++)
                     {
-                        ExecuteEvents.Execute(results[i].gameObject, data,function);
-                        break;
-                        //RaycastAll后ugui会自己排序，如果你只想响应透下去的最近的一个响应，这里ExecuteEvents.Execute后直接break就行。
+                        if(current!= results[i].gameObject)
+                        {
+                            ExecuteEvents.Execute(results[i].gameObject, data,function);
+                            break;
+                            //RaycastAll后ugui会自己排序，如果你只想响应透下去的最近的一个响应，这里ExecuteEvents.Execute后直接break就行。
+                        }
                     }
                 }
-            }
 
-            public void OnPointerClick(PointerEventData eventData)
-            {
-                PassEvent(eventData,ExecuteEvents.submitHandler);
-                PassEvent(eventData,ExecuteEvents.pointerClickHandler);
+                public void OnPointerClick(PointerEventData eventData)
+                {
+                    PassEvent(eventData,ExecuteEvents.submitHandler);
+                    PassEvent(eventData,ExecuteEvents.pointerClickHandler);
+                }
             }
-        }
-    }    
+        }    
+        ```
+        可以看到，PassEvent里面有一个循环，遍历所有事件，当发现与背景点击事件不同时，就执行，然后break
+
+    - 后来实际运行过程中发现，事件并不会穿透，检查了很久的代码也没发现问题，后来才发现是图标的图片或者文字将事件拦截了下来，也就是说射线穿透了一层，但是距离实际要响应物体之间还有其他物体拦住了射线，这个将射线拦截的属性是“Raycast Target”，打开时，他就是一个可以响应射线的物体，我们只要将无需响应的物体，比如装饰图片这样的物体的这个属性关闭即可。
+
+    - 设置完之后，发现button的响应还是不对，这里记录一下，button中如果需要相应射线，则其中一定要挂一个图片，并将其Raycast Target打开，然后如果是button的背景图片可以直接挂在父节点上，并将其button中Target Graph属性设置为自己即可，如下图所示：
+
+        ![img](assets/Unity-button-raycast.png)
+
+- 另外，今天换了新的版本控制软件，tower，需要破解，基本功能一样，只不过拉取时要先save stash一下，拉取完成后再apply stash。配合beyond compare一起使用效果更佳:
     ```
-    可以看到，PassEvent里面有一个循环，遍历所有事件，当发现与背景点击事件不同时，就执行，然后break
+    TOWER (GIT)
+    (Requires Tower 2.0.5 or newer)
+    Launch Beyond Compare, go to the Beyond Compare menu and run Install Command Line Tools.
+    Open Tower's preferences dialog on the Git Config Tab.
+    Set the Diff Tool drop-down to Beyond Compare.
+    Set the Merge tool drop-down to Beyond Compare
+    ```
 
-- 后来实际运行过程中发现，事件并不会穿透，检查了很久的代码也没发现问题，后来才发现是图标的图片或者文字将事件拦截了下来，也就是说射线穿透了一层，但是距离实际要响应物体之间还有其他物体拦住了射线，这个将射线拦截的属性是“Raycast Target”，打开时，他就是一个可以响应射线的物体，我们只要将无需响应的物体，比如装饰图片这样的物体的这个属性关闭即可。
+    [中文文档](https://www.git-tower.com/learn/git/ebook/cn/command-line/introduction)
 
-- 设置完之后，发现button的响应还是不对，这里记录一下，button中如果需要相应射线，则其中一定要挂一个图片，并将其Raycast Target打开，然后如果是button的背景图片可以直接挂在父节点上，并将其button中Target Graph属性设置为自己即可，如下图所示：
+    使用中发现一个问题，就是拉取时会报错，显示无效的用户名或密码：
 
-    ![img](assets/Unity-button-raycast.png)
+    ![img](assets/Tower-error.png)
 
-另外，今天换了新的版本控制软件，tower，需要破解，基本功能一样，只不过拉取时要先save stash一下，拉取完成后再apply stash。配合beyond compare一起使用效果更佳:
-```
-TOWER (GIT)
-(Requires Tower 2.0.5 or newer)
-Launch Beyond Compare, go to the Beyond Compare menu and run Install Command Line Tools.
-Open Tower's preferences dialog on the Git Config Tab.
-Set the Diff Tool drop-down to Beyond Compare.
-Set the Merge tool drop-down to Beyond Compare
-```
+    这时主要是账户没有注册到Tower中导致的，所以需要在账户中添加自己的bitbucket账号，输入用户名即可：
 
-[中文文档](https://www.git-tower.com/learn/git/ebook/cn/command-line/introduction)
+    ![img](assets/Tower-error2.png)
 
-使用中发现一个问题，就是拉取时会报错，显示无效的用户名或密码：
+- 今天leader还讲了项目的结构和mvvm结构，这里也记录一下
 
-![img](assets/Tower-error.png)
+    - 结构：
 
-这时主要是账户没有注册到Tower中导致的，所以需要在账户中添加自己的bitbucket账号，输入用户名即可：
+    ![img](assets/wod-structure-map.png)
 
-![img](assets/Tower-error2.png)
+    - Mvvm:
+
+    ![img](assets/wod-mvc-structure.png)
+
+    程序基于状态而不是事件，所以C不会通知V去做什么事情，比如讲一个button设置为enable，相反，C会直接修改M中的数据，数据的变动会直接反应到V上，来实现对V的控制。
+    
+    M需要将对应的数据绑定到V上，所有V中可以改变的信息都需要在M中出现，比如上面提到的，button的状态。
 
 # Day61: 08.19
 
-今天跟Hr提了离职，三个月的实习也算正式结束啦。
+今天跟Hr提了离职，三个月的实习也算正式结束啦~
