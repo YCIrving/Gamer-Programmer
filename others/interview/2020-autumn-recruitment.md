@@ -257,7 +257,9 @@ int main()
 
 # 猎豹移动（北京）
 
-[网申链接](http://hr.cmcm.com/campus)上目前还没有任何职位可供选择，及时关注公众号和网申链接
+[网申链接](http://hr.cmcm.com/Portal/Apply/Index)
+
+- 8.20 网申
 
 # 盖娅游戏
 
