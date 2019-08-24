@@ -36,33 +36,44 @@
     ```
 
 ## 循环
-- 写循环时遇到的一个问题，就是在循环体中修改循环变量，这时要用while而不是for，比如在一个字符串压缩的问题，要在一个字符串中找到一个字符连续出现的次数([报数问题](LeetCode/problems/38.count-and-say.md))
-```c++
-string stringParser(string s)
-{
-    string ret;
-    int num;
-    char c;
-    int i=0, j;
-    // *M* 对于修改循环变量的循环，用while而不要用for
-    while(i<s.length())
+- 写循环时遇到的一个问题，就是在循环体中修改循环变量，这时用while比for会方便很多，比如在一个字符串压缩的问题，要在一个字符串中找到一个字符连续出现的次数([报数问题](LeetCode/problems/38.count-and-say.md))
+    ```c++
+    string stringParser(string s)
     {
-        c = s[i];
-        num = 1;
-        for(j = i+1; j<s.length(); j++)
+        string ret;
+        int num;
+        char c;
+        int i=0, j;
+        // *M* 对于修改循环变量的循环，用while而不要用for
+        while(i<s.length())
         {
-            if(s[j] == c) num++;
-            else break;
+            c = s[i];
+            num = 1;
+            for(j = i+1; j<s.length(); j++)
+            {
+                if(s[j] == c) num++;
+                else break;
+            }
+            // *M* 循环体内修改循环变量
+            i=j;
+            // *M* 这里不能用append()，因为append中的参数应该是字符串类型，而不是char
+            ret.push_back('0'+num);
+            ret.push_back(c);
         }
-        // *M* 循环体内修改循环变量
-        i=j;
-        // *M* 这里不能用append()，因为append中的参数应该是字符串类型，而不是char
-        ret.push_back('0'+num);
-        ret.push_back(c);
+        return ret;
     }
-    return ret;
-}
+    ```
+## 分支
+- 在使用if-else语句判断时，要注意else if 中的语句不一定会被执行到，例如:
+  
+```c++
+while(i<10)
+if(a[i++]==1) cout<<'a'<<endl; 
+else if (a[i++]==2) cout<<'b'<<endl;
+else cout<<'c'<<endl;
 ```
+如果if中的条件不被满足，程序将执行else if中的语句，于是i又会被增加一次。以后遇到类似问题一定要小心，尤其是循环中对循环变量的修改，else if中的语句不一定会被执行。
+
 
 ## 鲁棒性
 目前我总结的程序鲁棒性检查，通常从以下几个点进行考虑：

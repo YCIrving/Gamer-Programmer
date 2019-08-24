@@ -79,6 +79,257 @@ OnEnable()
 
 # C++
 
+## C++中的模板类以及特化、偏特化
+
+模板特化（template specialization）不同于模板的实例化，**模板参数在某种特定类型下的具体实现**称为模板特化。模板特化有时也称之为模板的具体化，分别有函数模板特化和类模板特化。
+
+- 函数模板特化
+    ```c++
+    #include <iostream>
+    using namespace std;
+
+    template<typename T> T Max(T t1,T t2)
+    {
+        return (t1>t2)?t1:t2;
+    }
+
+    typedef const char* CCP;
+    template<> CCP Max<CCP>(CCP s1,CCP s2)
+    {
+        return (strcmp(s1,s2)>0)?s1:s2;
+    }
+
+    int main()
+    {
+        //隐式调用实例：int Max<int>(int,int)
+        int i=Max(10,5);
+        
+        //显式调用特化版本：const char* Max<const char*>(const char*,const char*)
+        const char* p=Max<const char*>("very","good");
+        cout<<"i:"<<i<<endl; // 输出 10
+        cout<<"p:"<<p<<endl;  // 输出 very
+    }
+    ```
+
+    在函数模板显式特化定义（Explicit Specialization Definition）中，显式关键字template和一对尖括号<>，然后是函数模板特化的定义。该定义指出了模板名、被用来特化模板的模板实参，以及函数参数表和函数体。**在上面的程序中，如果不给出函数模板Max< T>在T为const char*时的特化版本，那么在比较两个字符串的大小时，比较的是字符串的起始地址的大小，而不是字符串的内容在字典序中的先后次序。**
+
+- 类模板特化
+类模板特化类似于函数模板的特化，即类模板参数在某种特定类型下的具体实现。
+    ```c++
+    #include <iostream>
+    using namespace std;
+
+    template<typename T>class A
+    {
+        T num;
+    public:
+        A()
+        {
+            num=T(6.6);
+        }
+        void print()
+        {
+            cout<<"A'num:"<<num<<endl;
+        }
+    };
+
+    template<> class A<char*>
+    {
+        char* str;
+    public:
+        A(){
+            str="A' special definition ";
+        }
+        void print(){
+            cout<<str<<endl;
+        }
+    };
+
+    int main()
+    {
+        A<int> a1;      //显示模板实参的隐式实例化
+        a1.print(); // 输出 6
+        A<char*> a2;    //使用特化的类模板
+        A2.print(); // 输出 A' special definition
+    }
+    ```
+
+- 模板偏特化
+模板偏特化（Template Partitial Specialization）是模板特化的一种特殊情况，指显示指定部分模板参数而非全部模板参数，或者指定模板参数的部分特性分而非全部特性，也称为模板部分特化。与模板偏特化相对的是模板全特化，指对所有的模板参数进行特化。模板全特化与模板偏特化共同组成模板特化。
+
+    模板偏特化主要分为两种，一种是指**对部分模板参数**进行全特化，另一种是**对模板参数特性**进行特化，包括将模板参数特化为指针、引用或是另外一个模板类。
+
+- 函数模板偏特化
+假如我们有一个compare函数模板，在比较数值大小时没有问题，如果传入的是数值的地址，我们需要比较两个数值的大小，而非比较传入的地址大小。此时我们需要对compare函数模板进行偏特化。考察如下代码：
+
+    ```c++
+    #include <vector>
+    #include <iostream> 
+    using namespace std;
+
+    //函数模板
+    template<typename T, class N> void compare(T num1, N num2)
+    {
+        cout << "standard function template" << endl;
+        if(num1>num2)
+            cout << "num1:" << num1 << " > num2:" << num2 <<endl;
+        else
+            cout << "num1:" << num1 << " <= num2:" << num2 << endl;
+    }
+
+    //对部分模板参数进行特化
+    template<class N> void compare(int num1, N num2)
+    {
+        cout<< "partitial specialization" <<endl;
+        if (num1>num2)
+            cout << "num1:" << num1 << " > num2:" << num2 << endl;
+        else
+            cout << "num1:" << num1 << " <= num2:" << num2 << endl;
+    }
+
+    //将模板参数特化为指针
+    template<typename T, class N> void compare(T* num1, N* num2)
+    {
+        cout << "new partitial specialization" << endl;
+        if (*num1>*num2)
+            cout << "num1:" << *num1 << " > num2:" << *num2 << endl;
+        else
+            cout << "num1:" << *num1 << " <= num2:" << *num2 << endl;
+    }
+
+    //将模板参数特化为另一个模板类
+    template<typename T, class N> void compare(std::vector<T>& vecLeft, std::vector<T>& vecRight)
+    {
+        cout << "to vector partitial specialization" << endl;
+        if (vecLeft.size()>vecRight.size())
+            cout << "vecLeft.size()" << vecLeft.size() << " > vecRight.size():" << vecRight.size() << endl;
+        else
+            cout << "vecLeft.size()" << vecLeft.size() << " <= vecRight.size():" << vecRight.size() << endl;
+    }
+
+    int main()
+    {
+        compare<int,int>(30,31);//调用非特化版本compare<int,int>(int num1, int num2)
+
+        compare(30,'1');		//调用偏特化版本compare<char>(int num1, char num2)
+
+        int a = 30;
+        char c = '1';
+        compare(&a,&c);		//调用偏特化版本compare<int,char>(int* num1, char* num2)
+
+        vector<int> vecLeft{0};
+        vector<int> vecRight{1,2,3};
+        compare<int,int>(vecLeft,vecRight);	//调用偏特化版本compare<int,char>(int* num1, char* num2)
+    }
+    ```
+    输出结果：
+    ```c++
+    standard function template
+    num1:30 <= num2:31
+    partitial specialization
+    num1:30 <= num2:1
+    new partitial specialization
+    num1:30 <= num2:1
+    to vector partitial specialization
+    vecLeft.size()1 <= vecRight.size():3
+    ```
+
+- 类模板偏特化
+    ```c++
+    #include <vector>
+    #include <iostream> 
+    using namespace std;
+
+    //类模板
+    template<typename T, class N> class TestClass
+    {
+    public:
+        static bool comp(T num1, N num2)
+        {
+            cout <<"standard class template"<< endl;
+            return (num1<num2) ? true : false;
+        }
+    };
+
+    //对部分模板参数进行特化
+    template<class N> class TestClass<int, N>
+    {
+    public:
+        static bool comp(int num1, N num2)
+        {
+            cout << "partitial specialization" << endl;
+            return (num1<num2) ? true : false;
+        }
+    };
+
+    //将模板参数特化为指针
+    template<typename T, class N> class TestClass<T*, N*>
+    {
+    public:
+        static bool comp(T* num1, N* num2)
+        {
+            cout << "new partitial specialization" << endl;
+            return (*num1<*num2) ? true : false;
+        }
+    };
+
+    //将模板参数特化为另一个模板类
+    template<typename T, class N> class TestClass<vector<T>,vector<N>>
+    {
+    public:
+        static bool comp(const vector<T>& vecLeft, const vector<N>& vecRight)
+        {
+            cout << "to vector partitial specialization" << endl;
+            return (vecLeft.size()<vecRight.size()) ? true : false;
+        }
+    };
+
+    int main()
+    {
+        //调用非特化版本
+        cout << TestClass<char, char>::comp('0', '1') << endl;	
+        
+        //调用部分模板参数特化版本
+        cout << TestClass<int,char>::comp(30, '1') << endl;		
+
+        //调用模板参数特化为指针版本
+        int a = 30;
+        char c = '1';
+        cout << TestClass<int*, char*>::comp(&a, &c) << endl;		
+
+        //调用模板参数特化为另一个模板类版本
+        vector<int> vecLeft{0};
+        vector<int> vecRight{1,2,3};
+        cout << TestClass<vector<int>, vector<int>>::comp(vecLeft,vecRight) << endl;	
+    }
+    ```
+    输出结果：
+    ```c++
+    standard class template
+    1
+    partitial specialization
+    1
+    new partitial specialization
+    1
+    to vector partitial specialization
+    1
+    ```
+- 模板类调用优先级：
+
+    对主版本模板类、全特化类、偏特化类的调用优先级从高到低进行排序是：全特化类>偏特化类>主版本模板类。这样的优先级顺序对性能也是最好的。
+
+    但是模板特化并不只是为了性能优化，更多是为了让模板函数能够正常工作，最典型的例子就是STL中的iterator_traits。algorithm中大多数算法通过iterator对象来处理数据，但是同时允许以指针代替iterator对象，这是为了支持C-Style Array。如果直接操作iterator，那么为了支持指针类型，每个算法函数都需要进行重载，因为指针没有::value_type类型。为了解决这个问题，STL使用了iterator_traits对iterator特性进行封装，并为指针类型做了偏特化处理，算法通过它来操作iterator，不需要知道实际操作的是iterator对象还是指针。
+
+    ```c++
+    template<typename IteratorClass> class iterator_traits
+    ...
+    template<typename ValueType> class iterator_traits<ValueType*>
+    ...
+    template<typename ValueType> class iterator_traits<ValueType const*>
+    ...
+    ```
+    后面两是针对指针类型的偏特化，也是偏特化的一种常见形式。
+
 ## 深浅拷贝
 
 C++中类的拷贝有两种：深拷贝，浅拷贝：当出现类的等号赋值时，即会调用拷贝函数
@@ -340,6 +591,13 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：当出现类的等号赋�
     int &&i = j;//错误，因为j是左值，而i是右值引用，所以不能绑定到j。
     ```
 
+## 如何找到一个变量的右值引用？待整理，目前还不知道是什么意思。
+
+## std::move和std::forward
+
+## placement new 和 operator new (https://www.cnblogs.com/slgkaifa/p/6887887.html)
+
+
 ## Const
 
 - 修饰变量，说明该变量不可以被改变；
@@ -462,6 +720,55 @@ int main()
 - 通过this执行构造函数，给该空间添加属性和方法；
 
 - 把this返回给外部变量；
+
+## allocator
+
+[详细解析](https://blog.csdn.net/qingdujun/article/details/85224771)
+
+对C++的new而言，它首先会(1)分配内存，然后自动的完成(2)对象构造。这里可以用侯捷先生翻译的《深度探索C++对象模型》一书中的伪代码来表示new的过程：
+```c++
+Point* heap = __new(sizeof(Point));//开辟内存
+if (head != 0) {
+	head->Point::Point();//对象构造（内存构造）
+}
+```
+注意，__new不表示new（它只是完成内存申请），以上整个伪代码过程为new所完成的功能。
+正是因为new的这一连串的操作，造成了性能的下降。比如，
+```c++
+auto p = new string[100];
+for (int i = 0; i < 5; ++i){
+	p[i] = "balaba...";
+}
+```
+实际上，我只需要5个string，而new把100个对象全部构造好了（每个string已经被初始化为空字符串，也就是""）。
+
+然后，接着又将p[0-4]赋值为balaba…
+
+也就是前面将p[0-4]赋值为空字符串的操作，变得毫无意义。
+
+既然，new有它自身的局限性。对于性能要求极高的STL肯定是不会使用new的。好在有一个allocator类——它也是一个模板类，同时就是用来处理内存问题的，使用allocator可以将内存分配、对象构造分离开：
+
+allocator类将new的内存分配、对象构造，视作两个独立的过程，并由独立的函数负责。举个例子：
+
+```c++
+allocator<char> str;
+char* base = str.allocate(10), *p = base; //内存分配
+str.construct(p++, 'a');  //对象构造并初始化
+str.construct(p++, 'b');
+cout << base[0] << base[1];
+```
+因为allocator是模板类，所以需要指定类型。接着，调用allocate(10)函数来分配内存（申请了10个char内存）。然后，使用construct函数构造base[0]这块内存，并赋以初值a。
+
+这就将new内存分配、内存构造给分离开了。一切，都像我们看到的那样。
+
+同样，将delete的过程也拆分了开来。这是必须的，我们**不能用delete去释放allocate分配的内存**。
+
+```c++
+str.destroy(--p); //销毁对象
+str.destroy(--p);
+str.deallocate(base, 10); //释放内存
+```
+
 
 ## C++中new失败的处理
 
@@ -765,6 +1072,96 @@ int main(void)
 
 上面的代码中，仅需要重载实现第一个参数为x的函数，就可以实现对"<<"的支持，而且还支持连续输出。
 
+
+
+## 其他知识点
+- c++中赋值操作的返回值是值本身，所以支持连续赋值，如`a=b=10`。
+- `int *f()`：这个函数的返回值是一个指向int类型的指针；
+
+    `int(*f)()`：这是一个函数的指针.它要指向一个函数才能有用.指向一个函数之后可以用它来代替该函数.之后使用这个指针相当于使用该函数.
+- 下面代码的输出结果：
+    ```c++
+        int a=10, *b = &a, **c = &b, ***d=&c;
+        cout<<a<<endl<<b<<endl<<c<<endl<<d<<endl;
+        /*
+        输出：
+        10
+        0x69fed8
+        0x69fed4
+        0x69fed0
+        */
+    ```
+    只要你想可以一直`*`下去。
+
+- 如果短整型的长度是2字节，有一个短整型指针p的值是0xFFED1200，那么p＋1的值为(0xFFED1202)
+
+- 设置虚基类的目的是（2)
+    1. 简化程序
+    2. 消除二义性
+    3. 提高运行效率
+    4. 减少目标代码
+
+    多重继承图示：（以左边为例）
+
+    ![img](assets/c++-virtual-base-calss.jpg)
+
+    多重继承定义：
+    一个派生类（D）有2个或2个以上的基类（B和C）；
+
+    多重继承引起的二义性：
+    假如上述这些基类（B和C）具有相同的基类A，A中的成员数据和成员函数，最终都会以双份的形式拷贝到类D中，
+    那么调用的时候就会出现二义性问题。
+
+    虚基类：
+    专门用来解决多重继承引起的二义性问题；（可以理解为D直接从A继承）
+
+- 观察代码运行结果
+```c++
+    #define MAX(a,b) a>b?a:b
+
+    int a = 2, b =3;
+    int c = 2, d =3;
+    cout<< (MAX(MAX(a++,b),MAX(a++, b)))<<endl;
+    cout<<a<<endl;
+
+    // 输出 5 6
+    cout<<max(max(c++,d),max(c++,d))<<endl;
+    cout<<c<<endl;
+
+    // 输出 3 4
+```
+    对于define，要从最外层开始替换，替换完之后再去执行
+
+- 观察代码运行结果
+```c++
+    int a[10];
+    int *b = a;
+    cout<<sizeof(a)<<endl;
+    cout<<sizeof(b)<<endl;
+
+    // 输出40 4
+```
+
+- string类型的length()
+
+    下面代码执行的结果为：
+    ```c++
+    #include <iostream>
+    #include <string>
+
+    using namespace std;
+
+    int main()
+    {
+        string s = "abc\0def";
+        cout<<s.size()<<endl<<s.length()<<endl;
+        cout<<sizeof(s)<<endl<<s[5]<<endl;
+        return 0;
+    }
+    ```
+    不论是`size()`还是`length()`，程序都输出3，`sizeof()`输出4，`s[5]`为不确定的任意值。
+
+
 # 数据结构
 
 ## 数组、链表、Vector的区别
@@ -773,12 +1170,19 @@ int main(void)
 - STL中的list和链表不一样，list的底层实现是双向链表
 
 ## 一些STL的底层实现
+stl容器包含顺序容器和关联容器。关联容器主要有vector，list，deque，关联容器主要是pair、set、map、multiset和multimap，所以总共算是7种。
 - vector为数组，list是双向链表
 - deque为双端队列
-- stack或queue都是list或deque实现，不用vector可能是因为扩容耗时
+- stack或queue都是双端队列(deque)实现（有文章也说用list实现，目前还不确定），不用vector可能是因为扩容耗时
 - priority_queue为vector+max_heap.
 - set和map都是红黑树，红黑树的增删改查复杂度都是$O(logn)$.
 - 前面带hash的STL，比如hash_map（可以认为就是unordered_map）和hash_set都是哈希表，增删改查复杂度都是$O(1)$，但最坏情况为$O(n)$。哈希表涉及桶的概念，类似于桶排序，另外哈希表占用的内存会比红黑树大一些，因此常用于空间换时间或查询频繁的情形。
+- 还需要注意一点，对于`.size()`的操作，不同的STL时间复杂度也不同，对于vector、deque、vector（如果使用deque实现）、queue（如果使用deque实现），他们的`size()`都是用直接用尾部元素下标减去首部元素下标，所以是$O(1)$的复杂度。而`set`和`map`底层都是红黑树，`size()`操作也是$O(1)$级别，原因是额外存储了一个size变量还是底层用数组实现还不清楚。
+- 而`list()`的`size()`根据编译器不同，实现也不同，有的直接计算首节点到尾结点的距离，复杂度为$O(n)$，有的则记录一个额外的变量，但在进行链表剪切(`splice()`?)时，即将一个长链表从中间断开，形成两个新链表时，`size()`的$O(1)$特性会丢失。
+
+## 支持随机访问迭代器的容器
+
+随机访问迭代器是可以随机访问容器中的元素的双向迭代器。这种迭代器在Vector, Dequeue, String, 和数组类型Array容器上使用。在双向迭代器上定义的操作也适用于随机访问迭代器。而list不支持随机访问迭代器。
 
 ## 解决哈希冲突的方法
 - 开放定址法：从发生冲突的那个单元起，按照一定的次序，从哈希表中找到一个空闲的单元。然后把发生冲突的元素存入到该单元的一种方法。开放定址法需要的表长度要大于等于所需要存放的元素。
@@ -822,6 +1226,8 @@ Hi = RHi(key) i= 1,2,3 ... k;
     - 每个红色节点的两个子节点都是黑色的
     - 从任意节点到其每个叶子节点的所有路径都包含相同的黑色节点
 - B树、B+树、B*树：同样是平衡的，但叶子节点可以是M个，M>2，属于多叉树又名平衡多路查找树（查找路径不只两个），数据库索引技术和磁盘读写里大量使用者B树和B+树的数据结构，这里不做详细介绍。
+
+## 前置++ 和后置++ 的区别
 
 # 设计模式
 
@@ -974,6 +1380,16 @@ MVC 模式代表 Model-View-Controller（模型-视图-控制器） 模式。这
 - 第二次机会算法：当页面被访问 (读或写) 时设置该页面的 R 位为 1。需要替换的时候，检查最老页面的 R 位。如果 R 位是 0，那么这个页面既老又没有被使用，可以立刻置换掉；如果是 1，就将 R 位清 0，并把该页面放到链表的尾端，修改它的装入时间使它就像刚装入的一样，然后继续从链表的头部开始搜索。
 - 时钟：第二次机会算法需要在链表中移动页面，降低了效率。时钟算法使用环形链表将页面连接起来，再使用一个指针指向最老的页面。
 
+### 进程页表和内核页表
+内核页表中的内容为所有进程共享，每个进程都有自己的“进程页表”
+
+操作系统采用分页式存储管理(PAGING)方法，要求(2):
+1. 每个进程拥有一张页表，且进程的页表驻留在内存中
+2. 每个进程拥有一张页表，但只要执行进程的页表驻留在内存中，其他进程的页表不必驻留在内存中
+3. 所有进程共享一张页表，以节约有限的内存空间，但页表必须驻留在内存中
+4. 所有进程共享一张页表，只有页表中当前使用的页面必须驻留在内存中，以最大限度地节约有限的内存空间
+
+
 ### 分页和分段的比较
 - 对程序员的透明性：分页透明，但是分段需要程序员显式划分每个段。
 - 地址空间的维度：分页是一维地址空间，分段是二维的。
@@ -1035,6 +1451,10 @@ MVC 模式代表 Model-View-Controller（模型-视图-控制器） 模式。这
     网络号 ：192.168.2 .0
 
     注:主机号，全为0的是网络号（例如：192.168.2.0），主机号全为1的为广播地址（192.168.2.255）
+
+- 一种题型：某公司申请到一个C类IP网段，但要连接6个子公司，最大的一个子公司有26台主机，请问划分子网后应用什么子网掩码？
+  
+  答：需划分6个子网，故C类IP地址的默认子网掩码需从主机位借3位作为1来补充子网地址($2^3$>6)，题中IP地址为C类，所以掩码为11111111.11111111.11111111.11100000，即255.255.255.224。而掩码为255.255.255.224时，子网内最大可有30台计算机（$2^5$-网关-广播），可以分割出8个子网，满足条件。所以从前数和从后数的思路都是可行的，本题目刚好两者答案相同。
 
 ## ARP是地址解析协议，简单语言解释一下工作原理。
 
@@ -1297,6 +1717,12 @@ RARP是逆地址解析协议，作用是完成硬件地址到IP地址的映射�
 
 ![img](assets/5io-comparison.png)
 
+## 数据的序列化与反序列化
+
+序列化是说，将变量和实例这些数据，依照某种约定，转化（通常伴随着压缩）为一种通用的数据格式；转化后的数据，可以用来储存或者传输，以备下次读取使用。其中提到的格式可以是二进制的，也可以是字符串式的。反序列化，就是上述过程的补集：将序列化的数据读入，解析为编程语言可识别的数据结构的过程。
+
+数据序列化的目的是解决跨编程语言、跨操作系统平台的数据传输和储存的问题。
+
 # 数据库
 ## 关系型数据库
 - 关系型数据库最典型的数据结构是表，由二维表及其之间的联系所组成的一个数据组织
@@ -1333,6 +1759,10 @@ RARP是逆地址解析协议，作用是完成硬件地址到IP地址的映射�
     ![img](assets/struct-align2.jpg)
 
 - 原则3：指针本身所占的存储空间是4个字节就行了，而不必看它是指向什么类型的指针
+
+## 大小端
+
+## 各种编码（补码、原码）的定义和转换
 
 # 面向对象
 三大特征：封装、继承、多态
@@ -1497,6 +1927,25 @@ RARP是逆地址解析协议，作用是完成硬件地址到IP地址的映射�
 ## ECS
 
 ## RVO、HRVO、RVO2
+
+## 帧同步和状态同步
+
+## PBR技术
+
+## 程序化生成植被技术
+
+# 数学
+去祖龙面试时第一次被问到了数学题
+
+- 给定n个苹果和m个篮子，要求将n个苹果随机分到m个篮子中，并且每个篮子中的苹果数量不超过2/m个。
+
+    理解起来是：将每个篮子视为m/2（下取整）个小格，所以每个一共有n*m/2个小格，从这些小格中取n个放置苹果即可满足要求。
+
+- 蓄水池算法：就是一种均匀采样k个的算法，比如从一副牌中随机选择n张。该算法也可以适用于从一个字符流中进行采样，最后保留 n 个字符，而并不知道这个流什么时候结束，且须保证每个字符被采样到的几率相同。
+
+    - 先选取数据流中的前k个元素，保存在集合A中；
+    - 从第j（k + 1 <= j <= n）个元素开始，每次先以概率p = k/j选择是否让第j个元素留下。若j被选中，则从A中随机选择一个元素并用该元素j替换它；否则直接淘汰该元素；
+    - 重复步骤2直到结束，最后集合A中剩下的就是保证随机抽取的k个元素。
 
 # 面经
 - 自我介绍
