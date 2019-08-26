@@ -1161,6 +1161,63 @@ int main(void)
     ```
     不论是`size()`还是`length()`，程序都输出3，`sizeof()`输出4，`s[5]`为不确定的任意值。
 
+- 观察下面代码的运行结果
+    ```c++
+    #include <iostream>
+    #include <stdlib.h>
+    using namespace std;
+
+    int main()
+    {
+        char p1[] = "Hello";
+        char *p2 = "Hi";
+        char *p3 = (char*)malloc(100);
+        char p4[10][10];
+
+        cout<<sizeof(p1)<<endl;
+        cout<<sizeof(p2)<<endl;
+        cout<<sizeof(p3)<<endl;
+        cout<<sizeof(p4)<<endl;
+
+        // 依次输出 6 4 4 100
+
+        return 0;
+    }
+    ```
+
+- 观察下面代码
+    ```c++
+    int main()
+    {
+        char p1[] = "Hello World!";
+        char p2[] = "Hello World!";
+        
+        //在栈上创建两个数组，分别存放字符串，首地址不一样
+        if(p1 == p2) {
+            
+        } else {
+            
+        }
+    
+        char *p3 = "Hello World!";
+        char *p4 = "Hello World!";
+    
+        //在栈上创建两个指针，分别指向存储在静态数据区的字符串，地址一样	
+        if(p3 == p4) {
+            
+        } else {
+            
+        }
+    }
+    ```
+    结果显示，p1和p2不相等，p3和p4相等。
+
+    《c和指针》上有一段：指针和数组并不是相等的，当声明一个数组时，它同时也分配了一段内存空间，用于存储数组元素，但当声明一个指针时，它只分配了用于容纳指针的空间（32位中4个字节的大小）。
+
+    p1、p2、p3和p4都具有指针值，都可以进行间接访问（解引用）和下标引用操作。但是它们还是存在区别和联系：
+
+    1. `char p[] = “Hello World”` 的意义是在栈上创建数组，数组直接存放Hello World字符串，数组名p代表这段内存的首地址，是一个常量，`p++`操作是错误的！而`char * p = "Hello World"`的意义是在栈上创建指针，指向存储在静态数据区的字符串，指针p是一个指针变量，`p++`操作是正确的。
+    2. 当一个数组名作为函数参数时，数组名的值就是指向数组第一个元素的指针，所以此时传递给函数的是指针的拷贝。指针作为形参和数组名作为形参的效果是一样的 
 
 # 数据结构
 
