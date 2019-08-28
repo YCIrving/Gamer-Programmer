@@ -20,9 +20,9 @@
 今天接到了新的需求，要求使用Unity中的IMGUI的Treeview做prefab的解析和与lua的绑定。基本上和培养要求中说的一致。
 
 这个做一周，希望能把解析做好，之后继续做游戏中的背包系统和大地图城建，涉及wrpc的通信，即客户端与服务器之间的消息传递，听了一下leader的讲解，大致分为两种情况，一是客户端到服务器(C->S)，需要客户端发起请求，然后接受服务器传回的消息，主要通过lua中的回调来实现，大致是：
-```
+```Lua
 S:FunctionName(arg1, arg2, function (ret)
-    // do somethind in invoke function
+    // do something in invoke function
     end
 )
 ```
@@ -49,41 +49,42 @@ S:FunctionName(arg1, arg2, function (ret)
 
 1. 首先是逻辑部分，官网上封装的层级比较多，每个window包含一个treeview，负责显示树中的内容，每颗tree由不同的element组成，每个element包含深度、名称和id，存储为一个线性结构，按照深度和id恢复到原来的树形结构。
 2. 添加节点:
-```c#
-void SetMvvmTreeElements (GameObject openedPrefab)
-{
-    _mvvmPrefab
-    ScriptableObject.CreateInstance<MvvmPrefab>();
-    var gameObjectTreeElements = new List<MvvmGameObject>();
-    IDCounter = 0;
-            
-    var root = new MvvmGameObject("Root", -1, IDCounter);
-    gameObjectTreeElements.Add(root);
-
-    // 加入根节点后，排序功能会失效
-    root = new MvvmGameObject(_openedPrefab, 0, ++IDCounter);
-    gameObjectTreeElements.Add(root);
-
-    foreach (Transform child in _openedPrefab.transform)
+    ```c#
+    void SetMvvmTreeElements (GameObject openedPrefab)
     {
-            AddChildrenRecursive(root, child, gameObjectTreeElements);
+        _mvvmPrefab
+        ScriptableObject.CreateInstance<MvvmPrefab>();
+        var gameObjectTreeElements = new List<MvvmGameObject>();
+        IDCounter = 0;
+                
+        var root = new MvvmGameObject("Root", -1, IDCounter);
+        gameObjectTreeElements.Add(root);
+
+        // 加入根节点后，排序功能会失效
+        root = new MvvmGameObject(_openedPrefab, 0, ++IDCounter);
+        gameObjectTreeElements.Add(root);
+
+        foreach (Transform child in _openedPrefab.transform)
+        {
+                AddChildrenRecursive(root, child, gameObjectTreeElements);
+        }
+        _mvvmPrefab.treeElements = gameObjectTreeElements;
     }
-    _mvvmPrefab.treeElements = gameObjectTreeElements;
-}
 
-void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmGameObject> gameObjectTreeElements)
-{
-
-    var childAdded = new MvvmGameObject(child.gameObject, parentElement.depth + 1, ++IDCounter);
-    gameObjectTreeElements.Add(childAdded);
-
-    foreach (Transform grandChild in child.transform)
+    void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmGameObject> gameObjectTreeElements)
     {
-            AddChildrenRecursive(childAdded, grandChild, gameObjectTreeElements);
+
+        var childAdded = new MvvmGameObject(child.gameObject, parentElement.depth + 1, ++IDCounter);
+        gameObjectTreeElements.Add(childAdded);
+
+        foreach (Transform grandChild in child.transform)
+        {
+                AddChildrenRecursive(childAdded, grandChild, gameObjectTreeElements);
+        }
     }
-}
-```
-插入节点是一个BFS递归的过程，主要就是新建节点，并且初始化，然后加入到list中即可。
+    ```
+
+    插入节点是一个BFS递归的过程，主要就是新建节点，并且初始化，然后加入到list中即可。
 
 下周开始要实现背包系统和大地图城建了，感觉会更简单一些，同时也要开始正式准备秋招了。
 
@@ -110,7 +111,7 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 3. 在Console中，点击Collapse，可以将相同的错误折叠，方便观察其他错误。
 
 # Day 35: 07.13
-1. 查看Prefab在场景中的显示，可以将其拖动只Hierachy层级下的UIRoot中
+1. 查看Prefab在场景中的显示，可以将其拖动到Hierachy层级下的UIRoot中
 2. 修改Unity中grid的元素排列方式，如果需要左对齐，要将选项里的"Cell Width Force Expand In Group"取消掉。
 
     ![img](assets/grid-cell-alignment.png)
@@ -128,7 +129,7 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 # Day 36: 07.18
 1. IntelliJ中，使用Shift+Delete，可以删除一整行。
 2. Sourcetree中修改远程仓库路径：
-    由于仓库体积不断增大，pull和push速度受到影响，所以项目组将自己的仓库迁移到了本地，迁移后需要配置sourcetree的远程URL：
+    由于仓库体积不断增大，pull和push速度受到影响，所以项目组将自己的仓库迁移到了本地，迁移后需要配置SourceTree的远程URL：
 
     ![img](assets/Sourcetree-change-remote-path.jpg)
 
@@ -175,7 +176,7 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 
 - 注意的细节：
     
-    - 了解代码执行的先后顺序和次数是很重要的，比如那个函数会先执行，那个函数是回调，那个函数是每帧都被执行等
+    - 了解代码执行的先后顺序和次数是很重要的，比如那个函数会先执行，哪个函数是回调，哪个函数是每帧都被执行等
     - 修改prefab可以将其拖动到UIRoot中进行编辑，然后选择Overrides
     - prefab修改完记得拖回去应用，但存在改坏的可能，表现为不报错，无提示，但就是进不去场景
     - intelliJ每次打开都需要设置根目录，同时调试功能也比较好用，但每次调试都需要重新启动
@@ -188,7 +189,7 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
         - V中主要完成数据跟界面的绑定以及添加事件的监听，比如UI界面上的东西如何在代码中用变量表示，如何根据条件将数据展示给用户，不同的控件绑定哪些数据。
         - C中主要负责对M中的数据进行修改，比如用户点击了某个按钮，具体应该发生什么事情，即C中主要写逻辑。
         - V和C中都可以直接访问M，但V中主要是读取数据，C中主要是读写。
-    - 再来说说绑定的原理，我的理解其实就是定义一系列的监听函数，当数据发生变化时，就会调用这个监听函数(相当于onValueChanged)，然后将数据重新刷到UI上。当然有一些特殊的绑定，比如这次背包接触到的Gridview，可以自动根据list的变化，将list中的元素显示在背包的不同小格子(cell)中。最后需要注意的一点是，这里提到的数据变化，会调用监听其父节点的函数，而不是监听该数据本身的函数，奇怪的设计。
+    - 再来说说绑定的原理，我的理解其实就是定义一系列的监听函数，当数据发生变化时，就会调用这个监听函数(相当于`onValueChanged()`)，然后将数据重新刷到UI上。当然有一些特殊的绑定，比如这次背包接触到的Gridview，可以自动根据list的变化，将list中的元素显示在背包的不同小格子(cell)中。最后需要注意的一点是，这里提到的数据变化，会调用监听其父节点的函数，而不是监听该数据本身的函数，奇怪的设计。
     - 具体说说代码：
         
         1. 背包的Model：
@@ -960,7 +961,7 @@ void AddChildrenRecursive(TreeElement parentElement, Transform child, List<MvvmG
 
 明天就是7月20日了，入职已经两个月了，总算做了一个游戏发布应该会用到的代码，贡献了自己的一份力量。唯一不足的就是感觉自己的提升很有限，大部分时间都在稀里糊涂地敲代码，正确性上不是很有信心。比较欣慰的小细节是，发现自己的leader原来也有独立游戏的梦想，也很认同独立游戏的品质和可玩性，自己也玩过很多leader玩过的游戏，让自己觉得没有选错工作。
 
-秋招和实习确实挺冲突的，准备秋招基本一个星期没有干活，干活的时候回寝有一点都不想学。总之，这个月时间过得很快，后面还要多抽时间学习啊。
+秋招和实习确实挺冲突的，准备秋招基本一个星期没有干活，干活的时候回寝又一点都不想学习。总之，这个月时间过得很快，后面还要多抽时间学习啊。
 
 下个月做基础城建，适当放慢一些进度，重点放在秋招上。
 

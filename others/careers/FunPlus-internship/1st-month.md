@@ -1,4 +1,4 @@
-第一月：
+# 第一月：
 
 **时间：2019.05.20-2019.06.20**
 
@@ -34,7 +34,6 @@
 
 - 之后在item2中运行`brew install protobuf`
 
-- 
 - 在`/Users/ycirving/Work/wod-client/tools`路径下配置`wod-config-path`和`wod-share-path`为自己的路径，然后运行`./_refresh_wdsync_lua.sh`和`./_refresh_wrpc_lua.sh`来刷新wrpc和wdsync
 
 - 在`/Users/ycirving/Work/wod-shared`目录配置`local.js`，之后运行`./conv.sh all`来更新表格
@@ -200,7 +199,6 @@ cond2(no)->op2->e
 1. 使用`Ctrl+T`，搜索文件名、函数名等，并直接跳转到文件；
 2. 使用`Ctrl+Shift+F`可以跨文件搜索文本；
 3. 使用`Ctrl+G`，打开跳转菜单，输入行号可以直接跳转到指定行；
-4. 
 
 ## 编码经验
 
@@ -244,7 +242,7 @@ BECameraRTS.instance.InertiaUse = false;
 
 ## C#命名规范
 
-![Img](assets/C#-naming-conventions.png)
+![Img](assets/CSharp-naming-conventions.png)
 
 更多规则详见[github]([https://github.com/ktaranov/naming-convention)和[微软官方文档](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions).
 
@@ -310,7 +308,7 @@ BECameraRTS.instance.InertiaUse = false;
 > 	"abc/ddd/file2",
 >
 > 	"abc/ddd/file9"
-> ```
+>   ```
 >   
 > - 如果未持有任何锁，返回 []
 >   
@@ -321,7 +319,7 @@ BECameraRTS.instance.InertiaUse = false;
 >   - 如果有上锁的的锁，返回一个数组：
 >
 > 	```
-> {"lockName": "abc/ddd/file1", "userName": "abc"},
+>   {"lockName": "abc/ddd/file1", "userName": "abc"},
 > 	
 > 	{"lockName": "abc/ddd/file2", "userName": "abc"},
 > 	
@@ -472,114 +470,114 @@ BECameraRTS.instance.InertiaUse = false;
 
 2. 查了很多资料后，采用[下面的方式](https://forum.unity.com/threads/editor-callback-for-prefab-mode-being-open.566803/)解决第一个问题：
 
-   ```c#
-       static XLock()
-       {
-           PrefabStage.prefabStageOpened += OnPrefabStageOpened;
-           EditorApplication.update += Update;
-       }
-   
-       static void OnPrefabStageOpened(PrefabStage prefabStage)
-       {      
-           if (!XGlobalFlag.xGlobalFlag) return;
-           // lock prefab
-           var prefabPath = prefabStage.prefabAssetPath;
-           var guid = AssetDatabase.AssetPathToGUID(prefabPath);
-           try
-           {
-               LockFile(guid, prefabPath);
-           }
-           catch (Exception e)
-           {
-               _goBackToPreviousStage = true;
-               // EditorUtility.DisplayDialog("Error", e.ToString(), "OK");
-           }
-       }
-   ```
+    ```c#
+    static XLock()
+    {
+        PrefabStage.prefabStageOpened += OnPrefabStageOpened;
+        EditorApplication.update += Update;
+    }
+
+    static void OnPrefabStageOpened(PrefabStage prefabStage)
+    {      
+        if (!XGlobalFlag.xGlobalFlag) return;
+        // lock prefab
+        var prefabPath = prefabStage.prefabAssetPath;
+        var guid = AssetDatabase.AssetPathToGUID(prefabPath);
+        try
+        {
+            LockFile(guid, prefabPath);
+        }
+        catch (Exception e)
+        {
+            _goBackToPreviousStage = true;
+            // EditorUtility.DisplayDialog("Error", e.ToString(), "OK");
+        }
+    }
+    ```
 
    其中，定义一个主类`XLock`，在里面加上打开prefab时要调用的函数`OnPrefabStageOpened`，之后在外层实现即可。这里还需要注意的是` _goBackToPreviousStage`这个变量，它控制着是否需要返回上一层界面，即如果传输中发生了异常，则不能打开这个prefab，因此需要设置`_goBackToPreviousStage`为`true`，之后在`XLock`的`Update()`函数中进行界面的更新：
 
-   ```c#
-       static void Update()
-       {
-           if (_goBackToPreviousStage)
-           {
-               StageUtility.GoBackToPreviousStage();
-               _goBackToPreviousStage = false;
-           }
-   
-           if (_request == null)
-               return;
-     
-           if (_request.isDone)
-           {
-   //                _callback?.Invoke();
-   //                _callback = null;
-                   _request = null;
-           }
-       }
-   ```
+    ```c#
+    static void Update()
+    {
+        if (_goBackToPreviousStage)
+        {
+            StageUtility.GoBackToPreviousStage();
+            _goBackToPreviousStage = false;
+        }
+
+        if (_request == null)
+            return;
+    
+        if (_request.isDone)
+        {
+            // _callback?.Invoke();
+            // _callback = null;
+            _request = null;
+        }
+    }
+    ```
 
    
 
 3. 基础的HTTP通讯：
 
-   ```c#
-       static void PostRequest(string method, string body)
-       {
-           if (_request != null) return;
-   
-           var url = _baseUrl + "/" + method;
-           _request = new UnityWebRequest(url, "POST");
-   
-           if (method.Equals("listAll"))
-           {
-               _request.downloadHandler = new DownloadHandlerBuffer();
-               _request.SendWebRequest();
-           }
-   
-           else
-           {
-               byte[] bodyRaw = Encoding.UTF8.GetBytes(body);
-               _request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-               _request.downloadHandler = new DownloadHandlerBuffer();
-               // _request.SetRequestHeader("Content-Type", "application/json");
-               _request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-               _request.SendWebRequest();
-           }
-   
-           while (!_request.isDone)
-           {
-               Thread.Sleep(1);
-           }
-       }
+    ```c#
+    static void PostRequest(string method, string body)
+    {
+        if (_request != null) return;
+
+        var url = _baseUrl + "/" + method;
+        _request = new UnityWebRequest(url, "POST");
+
+        if (method.Equals("listAll"))
+        {
+            _request.downloadHandler = new DownloadHandlerBuffer();
+            _request.SendWebRequest();
+        }
+
+        else
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(body);
+            _request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            _request.downloadHandler = new DownloadHandlerBuffer();
+            // _request.SetRequestHeader("Content-Type", "application/json");
+            _request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            _request.SendWebRequest();
+        }
+
+        while (!_request.isDone)
+        {
+            Thread.Sleep(1);
+        }
+    }
    ```
 
-   代码中if的部分是发送一个空请求，else部分是发送一个有内容的请求。首先定义一个`WebRequest`，之后设置`downloadHandler`和`downloadHandler`，准备上传和接收数据，设置RequestHeader，如果是普通字符串，设置为`application/x-www-form-urlencoded`，Json设置为`application/json`，最后为了保证一定会拿到返回值，需要不断检查`request`的`isDone`属性是否为真，否则就需要继续等待。
+   代码中if的部分是发送一个空请求，else部分是发送一个有内容的请求。首先定义一个`WebRequest`，之后设置`uploadHandler`和`downloadHandler`，准备上传和接收数据，设置RequestHeader，如果是普通字符串，设置为`application/x-www-form-urlencoded`，Json设置为`application/json`，最后为了保证一定会拿到返回值，需要不断检查`request`的`isDone`属性是否为真，否则就需要继续等待。
    
-   消息同步这里再多说一句，尝试了很多不同的方法，包括创建回调函数(invoke) 、`yield return _request.SendWebRequest();`和使用`coroutines`，发现还是使用while doen这样比较好用而且简单，但官方并不推荐这么写。
+   消息同步这里再多说一句，尝试了很多不同的方法，包括创建回调函数(invoke) 、`yield return _request.SendWebRequest();`和使用`coroutines`，发现还是使用while done这样比较好用而且简单，但官方并不推荐这么写。
    
    
    
-4. 只有，在实际上锁之前，我们还需要得到用户设置的用户名，这里就需要用到弹窗获得用户输入的功能了，由于Unity 2018中没有找到模态(Modal)的输入窗口，所以我们换了个思路，使用模态提示和非模态的输入窗口混合来接收用户输入：
+4. 在实际上锁之前，我们还需要得到用户设置的用户名，这里就需要用到弹窗获得用户输入的功能了，由于Unity 2018中没有找到模态(Modal)的输入窗口，所以我们换了个思路，使用模态提示和非模态的输入窗口混合来接收用户输入：
 
-   ```c#
-       static void CheckUnityUserName()
-       {
-           var unityUserName = PlayerPrefs.GetString("UnityUserName");
-           if (string.IsNullOrEmpty(unityUserName))
-           {
-               if (!XSetUserNameWindow.userNameSetDone)
-               {
-                   EditorUtility.DisplayDialog("Please set your user name first.", "", "OK");
-                   XSetUserNameWindow.ShowWindow();
-                   throw new Exception("Please set your user name first.");
-               }
-               unityUserName = XSetUserNameWindow.unityUserName;
-               PlayerPrefs.SetString("UnityUserName", unityUserName);
-               PlayerPrefs.Save();
-           }
-       }
+    ```c#
+    static void CheckUnityUserName()
+    {
+        var unityUserName = PlayerPrefs.GetString("UnityUserName");
+        if (string.IsNullOrEmpty(unityUserName))
+        {
+            if (!XSetUserNameWindow.userNameSetDone)
+            {
+                EditorUtility.DisplayDialog("Please set your user name first.", "", "OK");
+                XSetUserNameWindow.ShowWindow();
+                throw new Exception("Please set your user name first.");
+            }
+            unityUserName = XSetUserNameWindow.unityUserName;
+            PlayerPrefs.SetString("UnityUserName", unityUserName);
+            PlayerPrefs.Save();
+        }
+    }
        
    
    public class XSetUserNameWindow : EditorWindow
@@ -645,103 +643,103 @@ BECameraRTS.instance.InertiaUse = false;
 
 5. 有了上面两个基本的功能，我们就可以实现基本的上锁和解锁功能了：
 
-   ```c#
-       public static void LockFile(string guid, string prefabPath)
-       {
-   //        PlayerPrefs.DeleteKey("UnityUserName");
-   //        PlayerPrefs.Save();
-   //        xSetUserNameWindow.init();
-           
-           // S1: checking unity user name
-           try
-           {
-               CheckUnityUserName();
-   
-           }
-           catch (Exception e)
-           {
-               throw e;
-           }
-           
-           var unityUserName = PlayerPrefs.GetString("UnityUserName");
-           
-           // S2: posting http request
-           // string json = "{ \"UserName\": \"" + unityUserName + "\", \"GUID\": \"" + guid + "\", \"Note\": \"" + prefabPath +"\"}";
-           
-           var requestBody = "args= -UserName " + unityUserName + " -Note " + prefabPath + " -GUID " + guid;
-           PostRequest("lock", requestBody);
-           
-           
-           Debug.Log("Lock function:");
-           Debug.Log("Sent: "+ requestBody);
-           Debug.Log("Received: " + _request.downloadHandler.text);
-           
-           // S3: analysing received json
-           XAnalyseJsonBasic jsonAnalysed = JsonUtility.FromJson<XAnalyseJsonBasic>(_request.downloadHandler.text);
-   
-           _responseCode = jsonAnalysed.code;
-           _responseResult = jsonAnalysed.result;
-   //        _callback = () =>
-   //        {
-   //            code = _request.responseCode;
-   //            result = _request.downloadHandler.text;
-   //        };
-   
-           // S4: Acting based on analysed json
-           if (_responseCode != 1)
-           {
-               EditorUtility.DisplayDialog("Lock file failed! " + _responseResult, "", "OK");
-               throw new Exception("Lock file failed! " + _responseResult);
-           }
-           else
-           {
-               // EditorUtility.DisplayDialog("Lock file success!", "", "OK");
-           }
-       }
+    ```c#
+    public static void LockFile(string guid, string prefabPath)
+    {
+        // PlayerPrefs.DeleteKey("UnityUserName");
+        // PlayerPrefs.Save();
+        // xSetUserNameWindow.init();
+        
+        // S1: checking unity user name
+        try
+        {
+            CheckUnityUserName();
+
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        
+        var unityUserName = PlayerPrefs.GetString("UnityUserName");
+        
+        // S2: posting http request
+        // string json = "{ \"UserName\": \"" + unityUserName + "\", \"GUID\": \"" + guid + "\", \"Note\": \"" + prefabPath +"\"}";
+        
+        var requestBody = "args= -UserName " + unityUserName + " -Note " + prefabPath + " -GUID " + guid;
+        PostRequest("lock", requestBody);
+        
+        
+        Debug.Log("Lock function:");
+        Debug.Log("Sent: "+ requestBody);
+        Debug.Log("Received: " + _request.downloadHandler.text);
+        
+        // S3: analysing received json
+        XAnalyseJsonBasic jsonAnalysed = JsonUtility.FromJson<XAnalyseJsonBasic>(_request.downloadHandler.text);
+
+        _responseCode = jsonAnalysed.code;
+        _responseResult = jsonAnalysed.result;
+        // _callback = () =>
+        // {
+        //  code = _request.responseCode;
+        //  result = _request.downloadHandler.text;
+        // };
+
+        // S4: Acting based on analysed json
+        if (_responseCode != 1)
+        {
+            EditorUtility.DisplayDialog("Lock file failed! " + _responseResult, "", "OK");
+            throw new Exception("Lock file failed! " + _responseResult);
+        }
+        else
+        {
+            // EditorUtility.DisplayDialog("Lock file success!", "", "OK");
+        }
+    }
    ```
 
-   ```c#
-       public static void UnlockFile(string guid, string prefabPath)
-       {
-           try
-           {
-               CheckUnityUserName();
-   
-           }
-           catch (Exception e)
-           {
-               throw e;
-           }
-           
-           var unityUserName = PlayerPrefs.GetString("UnityUserName");
-           var prefabNameTemp = prefabPath.Split('/');
-           var prefabName = prefabNameTemp[prefabNameTemp.Length - 1];
-           
-           var requestBody = "args= -UserName " + unityUserName + " -GUID " + guid;
-           // string json = "{ \"UserName\": \"" + unityUserName + "\", \"GUID\": \"" + guid + "\", \"Note\": \"" + prefabPath +"\"}";
-           
-           PostRequest("unlock", requestBody);
-   
-           XAnalyseJsonBasic jsonAnalysed = JsonUtility.FromJson<XAnalyseJsonBasic>(_request.downloadHandler.text);
-   
-           _responseCode = jsonAnalysed.code;
-           _responseResult = jsonAnalysed.result;
-   
-           Debug.Log("Unlock function:");
-           Debug.Log("Sent: "+ requestBody);
-           Debug.Log("Received: " + _request.downloadHandler.text);
-           
-           if (_responseCode != 1)
-           {
-               EditorUtility.DisplayDialog("Unlock file failed! " + _responseResult, "", "OK");
-               throw new Exception("Unlock file failed! " + _responseResult);
-           }
-           else
-           {
-               EditorUtility.DisplayDialog("Unlock the " + prefabName + " success!", "", "OK");
-           }
-       }
-   ```
+    ```c#
+    public static void UnlockFile(string guid, string prefabPath)
+    {
+        try
+        {
+            CheckUnityUserName();
+
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        
+        var unityUserName = PlayerPrefs.GetString("UnityUserName");
+        var prefabNameTemp = prefabPath.Split('/');
+        var prefabName = prefabNameTemp[prefabNameTemp.Length - 1];
+        
+        var requestBody = "args= -UserName " + unityUserName + " -GUID " + guid;
+        // string json = "{ \"UserName\": \"" + unityUserName + "\", \"GUID\": \"" + guid + "\", \"Note\": \"" + prefabPath +"\"}";
+        
+        PostRequest("unlock", requestBody);
+
+        XAnalyseJsonBasic jsonAnalysed = JsonUtility.FromJson<XAnalyseJsonBasic>(_request.downloadHandler.text);
+
+        _responseCode = jsonAnalysed.code;
+        _responseResult = jsonAnalysed.result;
+
+        Debug.Log("Unlock function:");
+        Debug.Log("Sent: "+ requestBody);
+        Debug.Log("Received: " + _request.downloadHandler.text);
+        
+        if (_responseCode != 1)
+        {
+            EditorUtility.DisplayDialog("Unlock file failed! " + _responseResult, "", "OK");
+            throw new Exception("Unlock file failed! " + _responseResult);
+        }
+        else
+        {
+            EditorUtility.DisplayDialog("Unlock the " + prefabName + " success!", "", "OK");
+        }
+    }
+    ```
 
    其中需要注意的包括对回传数据的解析和对异常的处理。
 
@@ -782,31 +780,31 @@ BECameraRTS.instance.InertiaUse = false;
 
 6. 最后就是右键菜单的添加：
 
-   ```c#
-       [MenuItem("Assets/xLock/Lock", true)]
-       static bool ValidateRightMouseLock()
-       {
-           return Selection.activeGameObject != null && XGlobalFlag.xGlobalFlag;
-       }
-   
-       [MenuItem("Assets/xLock/Lock")]
-       static void RightMouseLock()
-       {
-           var prefabPath = AssetDatabase.GetAssetPath(Selection.activeObject);
-           if (!prefabPath.EndsWith(".prefab")) return;
-           var guid = AssetDatabase.AssetPathToGUID(prefabPath);
-           try
-           {
-               LockFile(guid, prefabPath);
-           }
-           catch (Exception e)
-           {
-               _goBackToPreviousStage = true;
-               // EditorUtility.DisplayDialog("Error", e.ToString(), "OK");
-           }
-           
-       }
-   ```
+    ```c#
+    [MenuItem("Assets/xLock/Lock", true)]
+    static bool ValidateRightMouseLock()
+    {
+        return Selection.activeGameObject != null && XGlobalFlag.xGlobalFlag;
+    }
+
+    [MenuItem("Assets/xLock/Lock")]
+    static void RightMouseLock()
+    {
+        var prefabPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+        if (!prefabPath.EndsWith(".prefab")) return;
+        var guid = AssetDatabase.AssetPathToGUID(prefabPath);
+        try
+        {
+            LockFile(guid, prefabPath);
+        }
+        catch (Exception e)
+        {
+            _goBackToPreviousStage = true;
+            // EditorUtility.DisplayDialog("Error", e.ToString(), "OK");
+        }
+        
+    }
+    ```
 
    其中，在中括号中加入`'true'`参数的函数负责验证是否要启用该右键菜单，即通过在其中加入验证条件，可以控制该菜单是否被激活。
 
@@ -910,9 +908,9 @@ BECameraRTS.instance.InertiaUse = false;
            return pathsToSave.ToArray();
        }
    }
-   ```
+    ```
 
-   这里主要是用对函数，定义一个类，继承自`UnityEditor.AssetModificationProcessor`，之后对`OnWillMoveAsset`、`OnWillDeleteAsset`、`OnWillSaveAssets`这三个函数进行实现即可。
+    这里主要是用对函数，定义一个类，继承自`UnityEditor.AssetModificationProcessor`，之后对`OnWillMoveAsset`、`OnWillDeleteAsset`、`OnWillSaveAssets`这三个函数进行实现即可。
 
 总结一下就是，实现这个需求包括两大部分，第一是对用户操作的监听，第二是与服务器端的通信。但第二点只要有模板都很好实现，主要是第一点，如果合理并且全面地防止同时修改prefab情况的发生。
 
@@ -933,32 +931,32 @@ t.isOn = true;
 
 - 根据条件赋值
 
-```
-if(statement) a=b;
-else a=c;
-```
+    ```c#
+    if(statement) a=b;
+    else a=c;
+    ```
 
-改成：
+    改成：
 
-```
-a = statement? a : b
-```
+    ```c#
+    a = statement? a : b
+    ```
 
 - 反转if表达式
 
-```
-if(statement)
-{
-	...
-}
-```
+    ```c#
+    if(statement)
+    {
+        ...
+    }
+    ```
 
-改成
+    改成
 
-```
-if (!statement) return;
-...
-```
+    ```c#
+    if (!statement) return;
+    ...
+    ```
 
 
 
@@ -980,6 +978,6 @@ if (!statement) return;
 
 工作难度不是很高，遇到不会的也可以查，再不会就问问leader，基本都可以解决或者找到替代方案。另外感觉leader每天讨论和开会的时间比较多，实际写代码时间并没有很多，但就是出成果，每天都有很多可以展示，所以代码效率还是很重要的，自己写过的代码尽量能够理解并记忆，不断积累就能提高自己的代码效率。而不是实现一个功能需要不断地去搜索和查询。
 
-公司氛围比较好，完成需求的满足感也很高，现在就是觉得没有很系统地学习，导致有些代码不知道实现原理、需求无从下手以及不知道为什么这么写可以实现对应的功能。所以进入7月份，实验室那边工作压力不重了以后，就要静下心来系统地学习一下语法和面向对象的知识，同时准备秋招，fighting！最后放个做的地图编辑器的截图：:smile:
+公司氛围比较好，完成需求的满足感也很高，现在就是觉得没有很系统地学习，导致有些代码不知道实现原理、需求无从下手以及不知道为什么这么写可以实现对应的功能。所以进入7月份，实验室那边工作压力不重了以后，就要静下心来系统地学习一下语法和面向对象的知识，同时准备秋招，fighting！最后放个做的地图编辑器的截图:smile:：
 
 ![img](assets/wod-map-editor.png)
