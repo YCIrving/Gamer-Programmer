@@ -206,6 +206,7 @@
 [网申链接](https://www.nowcoder.com/careers/Garena/6419)
 - 8.19 申请游戏客户端开发工程师，同时给hr发了邮件内推(hr@garena.cn)
 - 8.20 接到电话，了解了公司，确认还可投递管培生的岗位，确定了下周一晚上七点笔试
+- 确定9.4晚上一面
 
 # 巨人网络（上海）
 
@@ -269,7 +270,7 @@
 >3.第一批集中面试（北京、广州、上海、天津、成都、西安、武汉七地开展
 
 - 8.17 报名，岗位是软件研发 [网申链接](https://career.abchina.com/)
-- 按要求准备，据说31号面试
+- 按要求准备，据说31号笔试
     1. 计算机基础扎实，熟练掌握C、C++、JAVA、C#中任意一门编程语言。 
     2. 熟练掌握Hadoop、MySQL、PostgreSQL、MongoDB、Redis、Memcached、Cassandra、SQLite中任意一项开发和管理技术。
     3. 了解windows、unix、linux等主流操作系统原理，了解一种或多种数据库。

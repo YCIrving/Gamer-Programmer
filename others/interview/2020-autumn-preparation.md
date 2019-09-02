@@ -1,31 +1,31 @@
 # 自我介绍
-- 面试官您好！我叫高宜琛，本科就读于大连理工大学软件学院，专业为软件工程，现在是北京大学信息科学与技术系计算机应用专业的一名研二学生，毕业时间是2020年7月。
-- 实验室方面，自己的研究方向主要是计算机字库的生成和压缩，完成了使用深度学习和传统图形学方法结合，通过用户输入的少量字符集，来生成完整矢量字库的任务，目前该成果已经投稿至Siggraph Asia 2019 Technical Briefs。
-- 跟游戏相关的项目，主要是从5月份开始，在北京Funplus公司实习期间完成的，岗位是游戏客户端研发，项目是一个SLG和COC结合的手游，截止到目前完成了若干个功能和需求，包括地图编辑器功能的增加和优化、Unity编辑器的资源锁、prefab的树形结构展示和游戏中背包的功能等。前面三个功能主要是为了使游戏美术和策划的工作更加便利，而背包功能主要包括物品的显示、使用和宝箱的使用等，涉及界面与数据的绑定、与服务器的通信等模块，相关内容已经整理到github。（其他一些简单的就是数字的压缩显示等）
-- 之所以来应聘游戏岗位，最重要的原因是对于游戏和游戏开发的热情和兴趣，从小就觉得游戏带给了自己很多欢乐和感动，很希望能够投入到其中，给别人带来同样的感受。
+- 面试官您好！我叫高宜琛，现在是北京大学信息科学与技术学院计算机应用专业的一名研二学生，毕业时间是2020年7月。本科就读于大连理工大学软件学院软件工程专业。之所以来应聘游戏岗位，最重要的原因是对于游戏和游戏开发的兴趣和热爱，一方面从小我就觉得游戏带给了自己很多的欢乐和感动，所以很希望长大以后也能够实际投入到其中，给别人带来同样的感受，另一方面自己也是计算机专业，比较适合编码相关的工作，所以选择了这个能够将自己兴趣和专业结合的职业作为自己的发展方向。
+- 实验室方面，自己的研究方向主要是计算机字库的生成和压缩，硕士期间完成了将深度学习和传统图形学方法结合，通过用户输入的少量字符集，来自动生成完整矢量字库的任务，目前该成果已经投稿至Siggraph Asia 2019 Technical Briefs。
+- 跟游戏相关的项目，除了本科做过一些游戏的demo外，主要是从5月份开始，在北京Funplus公司实习期间完成的，实习的岗位是游戏客户端研发，项目是一个SLG和COC结合的手游，截止八月20日离职，自己也完成了若干个功能和需求，包括地图编辑器功能的增加和优化、Unity编辑器的资源锁、prefab的树形结构展示、数字的压缩显示和游戏中背包的功能等。前面三个功能主要是为了使游戏美术和策划的工作更加便利，而背包功能主要包括物品的展示、使用和宝箱的开启特效等，涉及界面与数据的绑定、与服务器的通信等模块，相关内容已经整理到github。
 
 # 渲染管线
 
 - [OpenGL中的坐标转换](https://blog.csdn.net/shimazhuge/article/details/25135009):
 
-    四种坐标系:
-    1. 世界坐标
+    - 四种坐标系:
 
-    2. 局部坐标
+        1. 世界坐标
 
-    3. 视坐标
+        2. 局部坐标
 
-    4. 屏幕坐标
+        3. 视坐标
 
-    从三维物体到二维图象，就如同用相机拍照一样，通常都要经历以下几个步骤：
-    1. 将相机置于三角架上，让它对准三维景物，它相当于OpenGL中调整视点的位置，即**视点变换**（Viewing Transformation）。
+        4. 屏幕坐标
 
-    2. 将三维物体放在场景中的适当位置，它相当于OpenGL中的**模型变换**（Modeling Transformation），即对模型进行旋转、平移和缩放。
+    - 从三维物体到二维图像，就如同用相机拍照一样，通常都要经历以下几个步骤：
+        1. **视点变换**（Viewing Transformation）：调整视点的位置。将相机置于三角架上，让它对准一个三维场景（先假设场景中目前并没有模型）。
 
-    3. 选择相机镜头并调焦，使三维物体投影在二维胶片上，它相当于OpenGL中把三维模型投影到二维屏幕上的过程，即OpenGL的**投影变换**(Projection Transformation），OpenGL中投影的方法有两种，即正射投影和透视投影。为了使显示的物体能以合适的位置、大小和方向显示出来，必须要通过投影。有时为了突出图形的一部分，只把图形的某一部分显示出来，这时可以定义一个三维视景体（Viewing Volume）。正射投影时一般是一个长方体的视景体，透视投影时一般是一个棱台似的视景体。只有视景体内的物体能被投影在显示平面上，其他部分则不能。注：这里需要进行裁剪。
-    4. 冲洗底片，决定二维相片的大小，它相当与OpenGL中的**视口变换**（Viewport Transformation）（在屏幕窗口内可以定义一个矩形，称为视口（Viewport），视景体投影后的图形就在视口内显示）规定屏幕上显示场景的范围和尺寸。
+        2. **模型变换**（Modeling Transformation）：将三维模型放置在场景中的适当位置，并对其进行缩放、旋转和平移等变换。
 
-    通过上面的几个步骤，一个三维空间里的物体就可以用相应的二维平面物体表示了，也就能在二维的电脑屏幕上正确显示了。总的来说，三维物体的显示过程如下：
+        3. **投影变换**（Projection Transformation）：把三维模型投影到二维屏幕上并进行裁剪的过程。选择相机镜头并调焦，使三维模型投影在二维胶片上（OpenGL中投影的方法有两种，即正射投影和透视投影。为了使显示的物体能以合适的位置、大小和方向显示出来，必须要通过投影。有时为了突出图形的一部分，只把图形的某一部分显示出来，这时可以定义一个三维视景体（Viewing Volume）。正射投影时一般是一个长方体的视景体，透视投影时一般是一个棱台似的视景体。只有视景体内的物体能被投影在显示平面上，其他部分则不能。）
+        4. **视口变换**（Viewport Transformation）：规定屏幕上显示场景的范围和尺寸。冲洗底片，决定二维相片的大小。（在屏幕窗口内可以定义一个矩形，称为视口（Viewport），视景体投影后的图形就在视口内显示）
+
+    通过上面的几个步骤，一个三维空间里的物体就可以用相应的二维平面物体表示了，也就能在二维的电脑屏幕上正确显示了。总的来说，三维模型的显示过程如下：
 
     ![img](assets/coordinates-transform.jpg)
 
@@ -49,22 +49,20 @@
     
     变换顺序必须是**缩放->旋转->平移**
 
-    - 原因：在物体刚刚放入世界坐标系的时候使用的是本地坐标，也就是本地和全局坐标系的原点和坐标轴都是重合的（当然两者分别使用了左右手坐标系时除外 - 那是BUG），此时所有物体都“把世界坐标系当做自己的本地坐标系”。
-    
-    - 而经过了坐标变换之后：
-        - 缩放变换不改变坐标轴的走向，也不改变原点的位置，所以两个坐标系仍然重合。
-        - 旋转变换改变坐标轴的走向，但不改变原点的位置，所以两个坐标系坐标轴不再处于相同走向。
-        - 平移变换不改变坐标轴走向，但改变原点位置，两个坐标系原点不再重合。
+    - 原因：在物体刚刚放入世界坐标系的时候使用的是本地坐标，也就是本地和全局坐标系的原点和坐标轴都是重合的，此时所有物体都“把世界坐标系当做自己的本地坐标系”。而经过了坐标变换之后：
+        - 缩放变换不改变坐标轴的方向，也不改变原点的位置，所以两个坐标系仍然重合。
+        - 旋转变换改变坐标轴的方向，但不改变原点的位置，所以两个坐标系坐标轴不再处于相同方向。
+        - 平移变换不改变坐标轴方向，但改变原点位置，两个坐标系原点不再重合。
 
 - [OpenGL中，如何在屏幕上绘制一个三角形](https://learnopengl.com/Getting-started/Hello-Triangle)
 
+    - 对于任何一个模型，不管3D、2D，最初都是**点的数据**。比如一个正方形，就是4个角的坐标，立方体，就是8个点的坐标，一个游戏里的复杂人物，实际是许多的点拼接起来的。所以整个流程输入的是顶点的数据，即Vertex Data.
+
+    - 最终呈现给用户的是显示屏上的一个个像素，即输出的是每一个像素的颜色，所以渲染管线要做的就是把一个个坐标数据变成屏幕上正确的像素颜色
+
     ![img](assets/draw-triangle-cn.png)
 
-    - 对于任何一个模型，不管3D、2D，最初都是**点的数据**。比如一个正方形，就是4个角的坐标，立方体，就是8个点的坐标，一个游戏里的复杂人物，实际是许多的点拼接起来的，搜一下”三维模型“图片就有直观感受。所以整个流程输入的是顶点的数据，即Vertex Data.
-
-    - 而最终呈现给用户的是显示屏上的图像，而图像是一个个像素构成，所以输出的是每一个像素的颜色。整个流程要做的就是：怎么把一个个坐标数据变成屏幕上正确的像素颜色呢？
-
-    - 这张图片还是很直观的。而蓝色部分就是现代OpenGL可以让我们编写参与的部分。shader译作”着色器“，它是流程中的一段子程序，负责处理某一个阶段的任务，就像流水线上有很多不同的机器和人，它们负责一部分工作。
+    - 整个渲染管线如上图所示，而蓝色部分就是现代OpenGL可以让我们编写参与的部分。shader译作”着色器“，它是流程中的一段子程序，负责处理某一个阶段的任务，就像流水线上有很多不同的机器和人，它们负责一部分工作。
 
         1. 顶点数据(Vertex)：物体的3D坐标的数据的集合。
 
@@ -74,11 +72,11 @@
 
         4. 几何着色器(Geometry Shader)：**通过产生新顶点或取其他顶点来生成新形状**。
 
-        5. 光栅化阶段(Rasterization Stage)：**将形状映射为最终屏幕上相应的像素**，生成的东西叫片段(Fragment)。这个阶段会执行裁切，丢弃超出你的视图以外的所有像素，用来提升执行效率。（即投影）
+        5. 光栅化阶段(Rasterization Stage)：**将形状映射为最终屏幕上相应的像素，生成的东西叫片段(Fragment)**。这个阶段会执行裁切，丢弃超出你的视图以外的所有像素，用来提升执行效率。（即投影）
 
-        6. 片段着色器(Fragment Shader)：**计算一个像素的最终颜色**。这时接受的已经不是顶点，而是fragment，有碎片的意思，它就对应着一个像素单位。这一阶段主要就是要计算颜色，比如光照计算：在有N个光源的时候，这个fragment的颜色是什么，光的颜色、物体本身的颜色、这个fragment朝向等都要考虑。
+        6. 片段着色器(Fragment Shader)：**计算一个像素的最终颜色**。这时接受的是fragment，它就对应着一个像素单位。这一阶段主要就是要计算颜色，比如光照计算：在有N个光源的时候，这个fragment的颜色是什么，光的颜色、物体本身的颜色、这个fragment朝向等都要考虑。
 
-        7. Alpha测试和混合(Blending)：进一步透明度、组合等处理。
+        7. Alpha测试和混合(Blending)：进一步对透明度、组合等进行处理。
 
     - 对于大多数情况，只有三步需要我们操作：准备顶点数据，配置顶点着色器和片段着色器（因为GPU中没有默认的顶点/片段着色器）。
 
@@ -86,7 +84,7 @@
 # Lua
 - Lua 是一种轻量小巧的**脚本语言**，用**标准C语言**编写并以源代码形式开放， 其设计目的是为了**嵌入应用程序**中，从而**为应用程序提供灵活的扩展和定制功能**。
 - 八种基本数据类型：nil、boolean、number、string、function、userdata、thread、table.
-- 语句组(chunk)和语句块(block)的[区别](https://stackoverflow.com/questions/12119846/whats-the-difference-between-chunk-and-block-in-lua):一个chunk是一系列顺序执行的语句，chunk之间的运行是相互独立的，可以理解为一个函数；一个block仅仅是一系列语句，因此所有的chunk都是block，但不是所有的block都是chunk.
+- 语句组(chunk)和语句块(block)的[区别](https://stackoverflow.com/questions/12119846/whats-the-difference-between-chunk-and-block-in-lua)：一个chunk是一系列顺序执行的语句，chunk之间的运行是相互独立的，可以理解为一个函数；一个block仅仅是一系列语句，因此所有的chunk都是block，但不是所有的block都是chunk.
 
 # Unity
 ## Untiy中的Monobehaviour
@@ -106,267 +104,12 @@ OnEnable()
 
 # C++
 
-## C++中的模板类以及特化、偏特化
-
-模板特化（template specialization）不同于模板的实例化，**模板参数在某种特定类型下的具体实现**称为模板特化。模板特化有时也称之为模板的具体化，分别有函数模板特化和类模板特化。
-
-- 函数模板特化
-    ```c++
-    #include <iostream>
-    using namespace std;
-
-    template<typename T> T Max(T t1,T t2)
-    {
-        return (t1>t2)?t1:t2;
-    }
-
-    typedef const char* CCP;
-    template<> CCP Max<CCP>(CCP s1,CCP s2)
-    {
-        return (strcmp(s1,s2)>0)?s1:s2;
-    }
-
-    int main()
-    {
-        //隐式调用实例：int Max<int>(int,int)
-        int i=Max(10,5);
-        
-        //显式调用特化版本：const char* Max<const char*>(const char*,const char*)
-        const char* p=Max<const char*>("very","good");
-        cout<<"i:"<<i<<endl; // 输出 10
-        cout<<"p:"<<p<<endl;  // 输出 very
-    }
-    ```
-
-    在函数模板显式特化定义（Explicit Specialization Definition）中，显式关键字template和一对尖括号<>，然后是函数模板特化的定义。该定义指出了模板名、被用来特化模板的模板实参，以及函数参数表和函数体。**在上面的程序中，如果不给出函数模板Max< T>在T为const char*时的特化版本，那么在比较两个字符串的大小时，比较的是字符串的起始地址的大小，而不是字符串的内容在字典序中的先后次序。**
-
-- 类模板特化
-
-    类模板特化类似于函数模板的特化，即类模板参数在某种特定类型下的具体实现。
-
-    ```c++
-    #include <iostream>
-    using namespace std;
-
-    template<typename T>class A
-    {
-        T num;
-    public:
-        A()
-        {
-            num=T(6.6);
-        }
-        void print()
-        {
-            cout<<"A'num:"<<num<<endl;
-        }
-    };
-
-    template<> class A<char*>
-    {
-        char* str;
-    public:
-        A(){
-            str="A' special definition ";
-        }
-        void print(){
-            cout<<str<<endl;
-        }
-    };
-
-    int main()
-    {
-        A<int> a1;      //显示模板实参的隐式实例化
-        a1.print(); // 输出 6
-        A<char*> a2;    //使用特化的类模板
-        A2.print(); // 输出 A' special definition
-    }
-    ```
-
-- 模板偏特化
-
-    模板偏特化（Template Partitial Specialization）是模板特化的一种特殊情况，指显示指定部分模板参数而非全部模板参数，或者指定模板参数的部分特性分而非全部特性，也称为模板部分特化。与模板偏特化相对的是模板全特化，指对所有的模板参数进行特化。模板全特化与模板偏特化共同组成模板特化。
-
-    模板偏特化主要分为两种，一种是指**对部分模板参数**进行全特化，另一种是**对模板参数特性**进行特化，包括将模板参数特化为指针、引用或是另外一个模板类。
-
-- 函数模板偏特化
-
-    假如我们有一个compare函数模板，在比较数值大小时没有问题，如果传入的是数值的地址，我们需要比较两个数值的大小，而非比较传入的地址大小。此时我们需要对compare函数模板进行偏特化。考察如下代码：
-
-    ```c++
-    #include <vector>
-    #include <iostream> 
-    using namespace std;
-
-    //函数模板
-    template<typename T, class N> void compare(T num1, N num2)
-    {
-        cout << "standard function template" << endl;
-        if(num1>num2)
-            cout << "num1:" << num1 << " > num2:" << num2 <<endl;
-        else
-            cout << "num1:" << num1 << " <= num2:" << num2 << endl;
-    }
-
-    //对部分模板参数进行特化
-    template<class N> void compare(int num1, N num2)
-    {
-        cout<< "partitial specialization" <<endl;
-        if (num1>num2)
-            cout << "num1:" << num1 << " > num2:" << num2 << endl;
-        else
-            cout << "num1:" << num1 << " <= num2:" << num2 << endl;
-    }
-
-    //将模板参数特化为指针
-    template<typename T, class N> void compare(T* num1, N* num2)
-    {
-        cout << "new partitial specialization" << endl;
-        if (*num1>*num2)
-            cout << "num1:" << *num1 << " > num2:" << *num2 << endl;
-        else
-            cout << "num1:" << *num1 << " <= num2:" << *num2 << endl;
-    }
-
-    //将模板参数特化为另一个模板类
-    template<typename T, class N> void compare(std::vector<T>& vecLeft, std::vector<T>& vecRight)
-    {
-        cout << "to vector partitial specialization" << endl;
-        if (vecLeft.size()>vecRight.size())
-            cout << "vecLeft.size()" << vecLeft.size() << " > vecRight.size():" << vecRight.size() << endl;
-        else
-            cout << "vecLeft.size()" << vecLeft.size() << " <= vecRight.size():" << vecRight.size() << endl;
-    }
-
-    int main()
-    {
-        compare<int,int>(30,31);//调用非特化版本compare<int,int>(int num1, int num2)
-
-        compare(30,'1');		//调用偏特化版本compare<char>(int num1, char num2)
-
-        int a = 30;
-        char c = '1';
-        compare(&a,&c);		//调用偏特化版本compare<int,char>(int* num1, char* num2)
-
-        vector<int> vecLeft{0};
-        vector<int> vecRight{1,2,3};
-        compare<int,int>(vecLeft,vecRight);	//调用偏特化版本compare<int,char>(int* num1, char* num2)
-    }
-    ```
-    输出结果：
-    ```c++
-    standard function template
-    num1:30 <= num2:31
-    partitial specialization
-    num1:30 <= num2:1
-    new partitial specialization
-    num1:30 <= num2:1
-    to vector partitial specialization
-    vecLeft.size()1 <= vecRight.size():3
-    ```
-
-- 类模板偏特化
-    ```c++
-    #include <vector>
-    #include <iostream> 
-    using namespace std;
-
-    //类模板
-    template<typename T, class N> class TestClass
-    {
-    public:
-        static bool comp(T num1, N num2)
-        {
-            cout <<"standard class template"<< endl;
-            return (num1<num2) ? true : false;
-        }
-    };
-
-    //对部分模板参数进行特化
-    template<class N> class TestClass<int, N>
-    {
-    public:
-        static bool comp(int num1, N num2)
-        {
-            cout << "partitial specialization" << endl;
-            return (num1<num2) ? true : false;
-        }
-    };
-
-    //将模板参数特化为指针
-    template<typename T, class N> class TestClass<T*, N*>
-    {
-    public:
-        static bool comp(T* num1, N* num2)
-        {
-            cout << "new partitial specialization" << endl;
-            return (*num1<*num2) ? true : false;
-        }
-    };
-
-    //将模板参数特化为另一个模板类
-    template<typename T, class N> class TestClass<vector<T>,vector<N>>
-    {
-    public:
-        static bool comp(const vector<T>& vecLeft, const vector<N>& vecRight)
-        {
-            cout << "to vector partitial specialization" << endl;
-            return (vecLeft.size()<vecRight.size()) ? true : false;
-        }
-    };
-
-    int main()
-    {
-        //调用非特化版本
-        cout << TestClass<char, char>::comp('0', '1') << endl;	
-        
-        //调用部分模板参数特化版本
-        cout << TestClass<int,char>::comp(30, '1') << endl;		
-
-        //调用模板参数特化为指针版本
-        int a = 30;
-        char c = '1';
-        cout << TestClass<int*, char*>::comp(&a, &c) << endl;		
-
-        //调用模板参数特化为另一个模板类版本
-        vector<int> vecLeft{0};
-        vector<int> vecRight{1,2,3};
-        cout << TestClass<vector<int>, vector<int>>::comp(vecLeft,vecRight) << endl;	
-    }
-    ```
-    输出结果：
-    ```c++
-    standard class template
-    1
-    partitial specialization
-    1
-    new partitial specialization
-    1
-    to vector partitial specialization
-    1
-    ```
-- 模板类调用优先级：
-
-    对主版本模板类、全特化类、偏特化类的调用优先级从高到低进行排序是：全特化类>偏特化类>主版本模板类。这样的优先级顺序对性能也是最好的。
-
-    但是模板特化并不只是为了性能优化，更多是为了让模板函数能够正常工作，最典型的例子就是STL中的iterator_traits。algorithm中大多数算法通过iterator对象来处理数据，但是同时允许以指针代替iterator对象，这是为了支持C-Style Array。如果直接操作iterator，那么为了支持指针类型，每个算法函数都需要进行重载，因为指针没有::value_type类型。为了解决这个问题，STL使用了iterator_traits对iterator特性进行封装，并为指针类型做了偏特化处理，算法通过它来操作iterator，不需要知道实际操作的是iterator对象还是指针。
-
-    ```c++
-    template<typename IteratorClass> class iterator_traits
-    ...
-    template<typename ValueType> class iterator_traits<ValueType*>
-    ...
-    template<typename ValueType> class iterator_traits<ValueType const*>
-    ...
-    ```
-    后面两是针对指针类型的偏特化，也是偏特化的一种常见形式。
-
 ## 深浅拷贝
 
-C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋值时，即会调用拷贝函数**
+C++中类的拷贝有两种：深拷贝和浅拷贝。当出现**类的等号赋值**时，即会调用拷贝函数
 
-- 在未定义显式拷贝构造函数的情况下，系统会调用默认的拷贝函数——即浅拷贝，它能够完成成员的一一复制。当数据成员中没有指针时，浅拷贝是可行的；但当数据成员中**有指针时**（有对其他资源（如堆、文件、系统等）的引用时（引用可以是指针或引用）），如果采用简单的浅拷贝，则两类中的两个指针将指向同一个地址，当对象快结束时，会调用两次析构函数，而导致指针悬挂现象（指针指向非法的内存地址，那么这个指针就是悬挂指针，也叫野指针，意为无法正常使用的指针。它与内存泄漏正好是相反的概念），所以，此时必须采用深拷贝。
-- 如果在类中没有显式地声明一个拷贝构造函数，编译器将会自动生成一个默认的拷贝构造函数，该构造函数完成对象之间的位拷贝，**位拷贝又称浅拷贝**。深拷贝与浅拷贝的区别就在于深拷贝会在堆内存中另外申请空间来储存数据，从而也就解决了指针悬挂的问题。简而言之，当数据成员中有指针时，必须要用深拷贝。
+- 在未定义显式拷贝构造函数的情况下，系统会调用默认的拷贝函数——即浅拷贝，它能够完成成员的一一复制。当数据成员中没有指针时，浅拷贝是可行的；但当数据成员中**有指针时**（有对其他资源（如堆、文件、系统等）的引用时（引用可以是指针或引用）），如果采用简单的浅拷贝，则两个类中的两个指针将指向同一个地址，当其中一个对象析构时，析构函数将释放掉指针所指的地址，而导致另一个类中出现指针悬挂现象（如果一个指针指向非法的内存地址，那么这个指针就是悬挂指针，也叫野指针，意为无法正常使用的指针。它与内存泄漏正好是相反的概念，内存泄漏是指一块内存没有指针指向它），所以，此时必须采用深拷贝。
+- 深拷贝与浅拷贝的区别就在于深拷贝会在堆内存中另外申请空间来储存数据，从而也就解决了指针悬挂的问题。简而言之，当数据成员中有指针时，必须要用深拷贝。
 - 写法：
     ```c++
     class MyString
@@ -402,13 +145,13 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋
             }
 
             // Copy constructor
-            MyString(const MyString& source)
+            MyString(const MyString &source)
             {
                 // because m_length is not a pointer, we can shallow copy it
                 m_length = source.m_length;
             
                 // source.m_data is a pointer, so we need to deep copy it if it is non-null
-                // 注意这里判断的是source，也就是赋值对象的指针域，而不是被赋值对象，下同
+                // 注意这里判断的是source.m_data，也就是赋值对象，而不是被赋值对象，下同
                 if (source.m_data)
                 {
                     // allocate memory for our copy
@@ -422,7 +165,7 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋
                     m_data = nullptr;
             }
             // Assignment operator
-            MyString& operator=(const MyString & source)
+            MyString& operator=(const MyString &source)
             {
                 // check for self-assignment
                 if (this == &source)
@@ -453,15 +196,15 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋
             char* getString() { return m_data; }
             int getLength() { return m_length; }
     ```
-- 从上面可以看到，如果类内存在指针或动态申请的内存，我们就需要深拷贝，而定义深拷贝时，往往还需要写其他相关的函数：
+- 从上面可以看到，如果一个类内存在指针或动态申请的内存，我们就需要深拷贝，而定义深拷贝时，往往还需要写其他相关的函数：
     1. 构造函数：需要动态申请内存
     2. 拷贝构造函数：同样需要动态申请内存
     3. 析构函数：释放动态申请的内存
-    4. 重载等于号：处理赋值操作，需要释放内存后重新申请
+    4. 重载等于号：处理赋值操作，检查自我赋值，需要释放内存后重新申请
 
 - 重载等于号和拷贝构造函数很像，因为参数都是另外一个实例，但主要有三点区别：
     1. 需要检查是否是自我赋值
-    2. 返回值是`*this`
+    2. 返回值是`*this`（拷贝构造不需要显式`return`）
     3. 需要先释放内存，再重新申请，防止内存泄漏
     
     本质上是因为赋值和构造的区别，开始构造时，待构造对象一定是空的，而赋值之前，待赋值对象则可能有值。
@@ -588,17 +331,18 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋
     ```
 
 ## 内存泄漏、内存溢出、内存碎片
-- 内存泄漏（Memory Leak）：是指程序在申请内存后，无法释放已申请的内存空间，一次内存泄露危害可以忽略，但内存泄露堆积后果很严重，无论多少内存,迟早会被占光。
+- 内存泄漏（Memory Leak）：是指程序在申请内存后，无法释放已申请的内存空间，一次内存泄露危害可以忽略，但内存泄露堆积后果很严重，无论多少内存都会被占光。
 - 内存溢出（Out of Memory）：是指程序在申请内存时，没有足够的内存空间供其使用。
 - 区别：内存泄漏是申请内存后没有释放，但它的地址已经找不到了，所以这块内存无法再被使用，也无法再被回收。内存溢出就是简单的分配空间不足以放下数据，比如栈满时再做进栈必定产生空间溢出，叫上溢，栈空时再做退栈也产生空间溢出，称为下溢。
-- 同时还需要知道内存泄漏和指针悬挂的区别，见上文。
-- 内存碎片：描述一个系统中所有不可用的空闲内存，即采用分区式存储管理的系统，在储存分配过程中产生的、不能供用户作业使用的主存里的小分区称成“内存碎片”。内存碎片分为内部碎片和外部碎片。内部碎片就是已经被分配出去（能明确指出属于哪个进程）却不能被利用的内存空间，通常内部碎片难以完全避免；外部碎片指的是还没有被分配出去（不属于任何进程），但由于太小了无法分配给申请内存空间的新进程的内存空闲区域。
+- 内存碎片：描述一个系统中**所有不可用的空闲内存**，即采用分区式存储管理的系统，在储存分配过程中产生的、不能供用户作业使用的主存里的小分区称成“内存碎片”。内存碎片分为内部碎片和外部碎片。内部碎片就是已经被分配出去（能明确指出属于哪个进程）却不能被利用的内存空间，通常内部碎片难以完全避免；外部碎片指的是还没有被分配出去（不属于任何进程），但由于太小而无法分配给申请内存空间的新进程的内存空闲区域。
 
 
 ## new/delete 和 malloc/free
 - malloc与free是C++/C 语言的标准库**函数**（function），new/delete 是C++的**运算符**（operator）。
 - delete 用于释放 new 分配的空间，free 有用释放 malloc 分配的空间。
-- 调用free之前需要检查需要释放的指针是否为空，使用delete 释放内存则不需要检查指针是否为NULL。
+- 调用malloc时要进行类型转换，而new不用
+- 调用malloc后要检查指针是否为空，而new则不用，因为如果申请失败，new会直接抛出异常。
+- 调用free之前同样需要检查指针是否为空，使用delete释放内存则不需要检查指针是否为NULL。
 
 - 实例：
     ```c++
@@ -630,12 +374,15 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋
     ```
 
 ## C/C++中的内存布局
+
 ![img](assets/memory-layout-C.jpg)
-- 内存分为五个部分
+
+![img](assets/memory-layout-C2.png)
+- 内存分为六个部分（一般而言，未初始化数据区和静态数据区统称为全局区或静态区，即初始化的全局变量和静态变量在一块区域，未初始化的全局变量和未初始化的静态变量在相邻的另一块区域）
     - 代码区(Text segment)：存放CPU执行的机器指令（machine instructions）。通常，代码区是可共享的（即另外的执行程序可以调用它），因为对于频繁被执行的程序，只需要在内存中有一份代码即可。代码区通常是只读的，使其只读的原因是防止程序意外地修改了它的指令。另外，代码区还规划了局部变量的相关信息。
     - 未初始化数据区（Uninitialized Data Segment）：亦称BSS区（uninitialized data segment），存入的是全局未初始化变量。BSS这个叫法是根据一个早期的汇编运算符而来，这个汇编运算符标志着一个块的开始。BSS区的数据在程序开始执行之前被内核初始化为0或者空指针（NULL）。例如一个不在任何函数内的声明：
-        ```
-            long sum[1000];
+        ```c++
+        long sum[1000];
         ```
     - 全局初始化数据区/静态数据区（Initialized Data Segment）：该区包含了在程序中明确被初始化的全局变量、静态变量（包括全局静态变量和局部静态变量）和常量数据（如字符串常量）。例如，一个不在任何函数内的声明（全局数据）：
         ```c++
@@ -655,7 +402,12 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋
         int *ptr  = new int[10]; 
         } 
         ```
-    - 栈区（Stack）：在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束时这些存储单元自动被释放。**栈内存分配运算内置于处理器的指令集中，效率很高，比在堆上申请一个空间要快**，但是分配的内存容量有限。
+        申请过程：
+
+        首先操作系统有一个记录空闲内存地址的**链表**，当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序，另外，对于大多数系统，会在这块内存空间中的**首地址**处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将**多余**的那部分重新放入空闲链表中。
+    - 栈区（Stack）：在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束时这些存储单元自动被释放。**栈内存分配运算内置于处理器的指令集中，效率很高，比在堆上申请一个空间要快**，但是分配的内存容量有限。详解：
+        - 栈是机器系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。
+        - 堆则是C/C++函数库提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法（具体的算法可以参考数据结构/操作系统）在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于内存碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率比栈要低得多）
         ```c++
         int main() 
         { 
@@ -667,6 +419,28 @@ C++中类的拷贝有两种：深拷贝，浅拷贝：**当出现类的等号赋
         int c[n]; 
         } 
         ```
+        除了静态分配，栈空间也可以动态分配。静态分配是编译器完成的，比如自动变量（auto）的分配。动态分配由alloca函数完成。栈的动态分配无需释放（是自动的），也就没有释放函数。为可移植的程序起见，栈的动态分配操作是不被鼓励的
+
+    - 常量区域（Literals）：函数中的"adgfdf"这样的字符串存放在常量区
+        ```c++
+        int a = 0; //全局初始化区
+        char *p1; //全局未初始化区
+
+        void main()  {
+        int b; //栈
+        char s[] = "abc"; //栈，因为s是数组，所以其内容也在栈中
+        char *p2;  //栈
+        char *p3 = "123456";   / /123456{post.content}在常量区，p3在栈上，因为p3是指针，所以字符串在常量区
+        static int c = 0;  //全局（静态）初始化区
+
+        p1 = (char *)malloc(10);  //分配得来得10字节的区域在堆区
+        p2 = (char *)malloc(20); //分配得来得20字节的区域在堆区
+
+        strcpy(p1, "123456");   //123456{post.content}放在常量区，编译器可能会将它与p3所指向的"123456"优化成一个地方
+        }
+        ```
+
+
 
 ## 引用和指针的区别
 
@@ -1374,6 +1148,265 @@ in A
 ```
 
 解释：构造类B时，先调用A的构造函数，然后再调用B的构造函数。此时即使A的构造函数中存在虚函数，也会像不是虚函数一样被执行。同理，析构B时，A中析构函数调用的虚函数也依然是自己的虚函数。
+
+## C++中的模板类以及特化、偏特化
+
+模板特化（template specialization）不同于**模板的实例化**，**模板参数在某种特定类型下的具体实现**称为模板特化。模板特化有时也称之为模板的具体化，分别有函数模板特化和类模板特化。
+
+- 函数模板特化
+    ```c++
+    #include <iostream>
+    using namespace std;
+
+    template<typename T> T Max(T t1, T t2)
+    {
+        return (t1>t2)?t1:t2;
+    }
+
+    typedef const char* CCP;
+    // 函数模板Max的特化，结果还是一个函数模板    
+    template<> CCP Max<CCP>(CCP s1,CCP s2)
+    {
+        return (strcmp(s1,s2)>0)?s1:s2;
+    }
+
+    int main()
+    {
+        //隐式调用实例：int Max<int>(int,int)
+        int i=Max(10,5);
+        
+        //显式调用特化版本：const char* Max<const char*>(const char*,const char*)
+        const char* p=Max<const char*>("very","good");
+        cout<<"i:"<<i<<endl; // 输出 10
+        cout<<"p:"<<p<<endl;  // 输出 very
+    }
+    ```
+
+    函数模板显式特化定义（Explicit Specialization Definition）的开头由显式关键字template和一对尖括号<>组成，然后是函数模板特化的定义。该定义指出了模板名、被用来特化模板的模板实参，以及函数参数表和函数体。在上面的程序中，如果不给出函数模板Max在T为const char*时的特化版本，那么在比较两个字符串的大小时，比较的是字符串的起始地址的大小，而不是字符串的内容在字典序中的先后次序。
+
+- 类模板特化
+
+    类模板特化类似于函数模板的特化，即类模板参数在某种特定类型下的具体实现。
+
+    ```c++
+    #include <iostream>
+    using namespace std;
+
+    template<typename T>class A
+    {
+        T num;
+    public:
+        A()
+        {
+            num=T(6.6);
+        }
+        void print()
+        {
+            cout<<"A'num:"<<num<<endl;
+        }
+    };
+
+    // 类模板A的特化，结果依然是一个模板类
+    template<> class A<char*>
+    {
+        char* str;
+    public:
+        A(){
+            str="A' special definition ";
+        }
+        void print(){
+            cout<<str<<endl;
+        }
+    };
+
+    int main()
+    {
+        A<int> a1;      //显式模板实参的隐式实例化
+        a1.print(); // 输出 6
+        A<char*> a2;    //使用特化的类模板
+        A2.print(); // 输出 A' special definition
+    }
+    ```
+
+- 模板偏特化
+
+    模板偏特化（Template Partitial Specialization）是模板特化的一种特殊情况，指显式指定部分模板参数而非全部模板参数，或者指定模板参数的部分特性而非全部特性，也称为模板部分特化。与模板偏特化相对的是模板全特化，指对所有的模板参数进行特化。模板全特化与模板偏特化共同组成模板特化。
+
+    模板偏特化主要分为两种，一种是指对**部分模板参数**进行全特化，另一种是对**模板参数特性**进行特化，包括将模板参数特化为指针、引用或是另外一个模板类。
+
+- 函数模板偏特化
+
+    假如我们有一个compare函数模板，在比较数值大小时没有问题，如果传入的是数值的地址，我们需要比较两个数值的大小，而非比较传入的地址大小。此时我们需要对compare函数模板进行偏特化。考察如下代码：
+
+    ```c++
+    #include <vector>
+    #include <iostream> 
+    using namespace std;
+
+    //函数模板
+    template<typename T, class N> void compare(T num1, N num2)
+    {
+        cout << "standard function template" << endl;
+        if(num1>num2)
+            cout << "num1:" << num1 << " > num2:" << num2 <<endl;
+        else
+            cout << "num1:" << num1 << " <= num2:" << num2 << endl;
+    }
+
+    //对部分模板参数进行特化
+    template<class N> void compare(int num1, N num2)
+    {
+        cout<< "partitial specialization" <<endl;
+        if (num1>num2)
+            cout << "num1:" << num1 << " > num2:" << num2 << endl;
+        else
+            cout << "num1:" << num1 << " <= num2:" << num2 << endl;
+    }
+
+    //将模板参数特化为指针
+    template<typename T, class N> void compare(T* num1, N* num2)
+    {
+        cout << "new partitial specialization" << endl;
+        if (*num1>*num2)
+            cout << "num1:" << *num1 << " > num2:" << *num2 << endl;
+        else
+            cout << "num1:" << *num1 << " <= num2:" << *num2 << endl;
+    }
+
+    //将模板参数特化为另一个模板类
+    template<typename T, class N> void compare(std::vector<T>& vecLeft, std::vector<T>& vecRight)
+    {
+        cout << "to vector partitial specialization" << endl;
+        if (vecLeft.size()>vecRight.size())
+            cout << "vecLeft.size()" << vecLeft.size() << " > vecRight.size():" << vecRight.size() << endl;
+        else
+            cout << "vecLeft.size()" << vecLeft.size() << " <= vecRight.size():" << vecRight.size() << endl;
+    }
+
+    int main()
+    {
+        compare<int,int>(30,31);//调用非特化版本compare<int,int>(int num1, int num2)
+
+        compare(30,'1');		//调用偏特化版本compare<char>(int num1, char num2)
+
+        int a = 30;
+        char c = '1';
+        compare(&a,&c);		//调用偏特化版本compare<int,char>(int* num1, char* num2)
+
+        vector<int> vecLeft{0};
+        vector<int> vecRight{1,2,3};
+        compare<int,int>(vecLeft,vecRight);	//调用偏特化版本compare<int,char>(int* num1, char* num2)
+    }
+    ```
+    输出结果：
+    ```c++
+    standard function template
+    num1:30 <= num2:31
+    partitial specialization
+    num1:30 <= num2:1
+    new partitial specialization
+    num1:30 <= num2:1
+    to vector partitial specialization
+    vecLeft.size()1 <= vecRight.size():3
+    ```
+
+- 类模板偏特化（区别主要是comp函数的形参类型）
+    ```c++
+    #include <vector>
+    #include <iostream> 
+    using namespace std;
+
+    //类模板
+    template<typename T, class N> class TestClass
+    {
+    public:
+        static bool comp(T num1, N num2)
+        {
+            cout <<"standard class template"<< endl;
+            return (num1<num2) ? true : false;
+        }
+    };
+
+    //对部分模板参数进行特化
+    template<class N> class TestClass<int, N>
+    {
+    public:
+        static bool comp(int num1, N num2)
+        {
+            cout << "partitial specialization" << endl;
+            return (num1<num2) ? true : false;
+        }
+    };
+
+    //将模板参数特化为指针
+    template<typename T, class N> class TestClass<T*, N*>
+    {
+    public:
+        static bool comp(T* num1, N* num2)
+        {
+            cout << "new partitial specialization" << endl;
+            return (*num1<*num2) ? true : false;
+        }
+    };
+
+    //将模板参数特化为另一个模板类
+    template<typename T, class N> class TestClass<vector<T>,vector<N>>
+    {
+    public:
+        static bool comp(const vector<T>& vecLeft, const vector<N>& vecRight)
+        {
+            cout << "to vector partitial specialization" << endl;
+            return (vecLeft.size()<vecRight.size()) ? true : false;
+        }
+    };
+
+    int main()
+    {
+        //调用非特化版本
+        cout << TestClass<char, char>::comp('0', '1') << endl;	
+        
+        //调用部分模板参数特化版本
+        cout << TestClass<int,char>::comp(30, '1') << endl;		
+
+        //调用模板参数特化为指针版本
+        int a = 30;
+        char c = '1';
+        cout << TestClass<int*, char*>::comp(&a, &c) << endl;		
+
+        //调用模板参数特化为另一个模板类版本
+        vector<int> vecLeft{0};
+        vector<int> vecRight{1,2,3};
+        cout << TestClass<vector<int>, vector<int>>::comp(vecLeft,vecRight) << endl;	
+    }
+    ```
+    输出结果：
+    ```c++
+    standard class template
+    1
+    partitial specialization
+    1
+    new partitial specialization
+    1
+    to vector partitial specialization
+    1
+    ```
+- 模板类调用优先级：
+
+    对主版本模板类、全特化类、偏特化类的调用优先级从高到低进行排序是：**全特化类>偏特化类>主版本模板类**。
+
+- 模板特化的意义：
+
+    模板特化并不只是为了性能优化，更多是为了让模板函数能够正常工作，最典型的例子就是STL中的iterator_traits。algorithm中大多数算法通过iterator对象来处理数据，但是同时允许以指针代替iterator对象，这是为了支持C-Style Array。如果直接操作iterator，那么为了支持指针类型，每个算法函数都需要进行重载，因为指针没有::value_type类型。为了解决这个问题，STL使用了iterator_traits对iterator特性进行封装，并为指针类型做了偏特化处理，算法可以通过它来操作iterator，而不需要知道实际操作的是iterator对象还是指针。
+
+    ```c++
+    template<typename IteratorClass> class iterator_traits
+    ...
+    // 下面两个是针对指针类型的偏特化，也是偏特化的一种常见形式。
+    template<typename ValueType> class iterator_traits<ValueType*>
+    ...
+    template<typename ValueType> class iterator_traits<ValueType const*>
+    ...
+    ```
 
 ## 其他知识点
 - c++中赋值操作的返回值是值本身，所以支持连续赋值，如`a=b=10`。
