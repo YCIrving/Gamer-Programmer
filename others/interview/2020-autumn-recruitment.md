@@ -178,7 +178,7 @@
 8.13 投递简历，并找人内推：
 [投递链接](https://campus.kuaishou.cn/recruit/campus/e/#/campus/index/)
 
-# 吉比特&雷霆游戏
+# 吉比特&雷霆游戏（深圳/厦门）
 ## 网申
 [网申链接](https://campus.g-bits.com/recruit)
 
