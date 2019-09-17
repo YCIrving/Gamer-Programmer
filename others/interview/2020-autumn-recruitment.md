@@ -14,7 +14,7 @@
 ![img](assets/2020-Tencent2.jpg)
 1. 8.18 在[网申链接](http://join.qq.com)投递简历，地点选择了腾讯深圳总部
 2. 8.28 视频一面，顺利通过
-3. 
+3. 9.14 视频二面，没有通过o(╥﹏╥)o
 
 
 # 网易
@@ -239,6 +239,16 @@
 
 ## 网申
 [网申链接](http://zhaopin.37.com/index.php?m=Home&c=campus&a=post_info&id=998)
+
+# 心动网络 X TapTap
+[网申链接](https://www.nowcoder.com/careers/XD/6632)
+
+
+# Ubisoft（上海）
+## 网申
+发了简历进行网申
+网申邮箱：sha-recruitment@ubisoft.com
+
 
 # 农业银行
 本不该出现在这里……
