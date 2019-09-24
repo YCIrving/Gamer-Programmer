@@ -111,9 +111,6 @@ OnDisable()
 OnEnable()
 ```
 
-# C#
-
-
 ## UGUI和NGUI的区别
 ![img](assets/ugui-ngui-comparison.png)
 
@@ -126,6 +123,13 @@ OnEnable()
 - AnimationState：动画状态，用来改变单一动画的播放速度、权重、时间、层级、播放Mode以及混合模式；
 - AnimationEvent：动画事件，用于某种条件下触发自定义函数
 - StateMachineBehaviour：动画状态机管理器拓展类，当脚本继承了该类之后，可以绑定到Animator的某个State上面，当状态发生变化，可以重载响应函数。
+
+
+# C#
+ref out
+unity中的编译
+struct 和 class的区别
+观察者模式
 
 # C++
 
