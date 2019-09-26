@@ -3135,6 +3135,25 @@ RARP是逆地址解析协议，作用是完成硬件地址到IP地址的映射�
 
     形式化描述就是，对于一个三角形ABC和点P，先计算向量PA、PB、PC，然后计算它们之间的叉乘，计算时要按顺序，PAxPB、PBxPC、PCxPA，如果三个结果同正或同负，则说明P在ABC内部。
 
+    计算叉乘：
+    
+    ```c++
+    double t1 = PA.CrossProduct(PB);
+    double t2 = PB.CrossProduct(PC);
+    double t3 = PC.CrossProduct(PA);
+    return t1*t2 >= 0 && t1*t3 >= 0;
+
+    ... 
+
+    // 向量叉乘的实现
+
+    Vector2d:: double CrossProduct(const Vector2d vec)
+    {
+        return x_*vec.y_ - y_*vec.x_;
+    }    
+
+    ```
+
 - 也可以使用面积法，求三个点P和任意两顶点组成的三角形面积之和是否与ABC组成的三角形面积相等。
 
 ## 赛马问题
