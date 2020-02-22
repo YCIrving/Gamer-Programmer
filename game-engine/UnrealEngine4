@@ -1,0 +1,30 @@
+RoadMap:
+1. 官方教程: https://learn.unrealengine.com/home/LearningPath/94215?r=False&ts=637166137773737720
+2. 官方中文教程: https://www.bilibili.com/video/av11692668
+3. 第一个游戏文档：https://www.raywenderlich.com/771-unreal-engine-4-tutorial-for-beginners-getting-started
+
+What is a Material?
+A material determines how the surface of something looks. At a basic level, a material defines four things:
+
+Base Color: The color or texture of a surface. Used to add detail and color variations.
+Metallic: How “metal-like” a surface is. Generally, a pure metal will have the maximum Metallic value whereas fabric will have a value of zero.
+Specular: Controls the shininess of non-metallic surfaces. For example, ceramic would have a high Specular value but clay would not.
+Roughness: A surface with maximum roughness will not have any shininess. Used for surfaces such as rock and wood.
+
+
+Blueprints allow you to create custom behaviors for your objects. Your object can be something physical (like the turntable) or something abstract such as a health system.
+
+Note: If you prefer to write code, you can use C++ instead.
+
+While Blueprints are easy to use, they are not as fast as C++ code. So, if you need to use something computationally heavy like a complex algorithm, you should consider using C++.
+
+Even if you prefer using C++, there are times where it is a good idea to use Blueprints. Here are some of the benefits of Blueprints:
+
+Generally, it is quicker to develop using Blueprints than C++.
+Easy organization. You can separate your nodes into different areas such as functions and graphs.
+If you are working with non-programmers, modifying the Blueprint is easy due to its visual and intuitive nature.
+
+
+If a Blueprint is a car then components are the building blocks that make up the car. The doors, wheels and engine are all examples of components.
+
+4. 第一个游戏视频：https://www.youtube.com/watch?v=DywBqQtTHMo&list=PLL0cLF8gjBprG6487lxqSq-aEo6ZXLDLg
