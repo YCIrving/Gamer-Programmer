@@ -25,15 +25,18 @@ return [0, 1].
 // paste your code here
 ```
 
-### Complexity Analysis: 
+### Rethinking:
 
+### Complexity Analysis & Running Details: 
+
+#### Complexity Analysis:
 - Time complexity : $O(n^2)$. 
 - Space complexity : $O(1)$. 
 
-### Details:
+#### Running Details:
 
-> Runtime: 148 ms, faster than 27.61% of C++ online submissions.
+> Runtime: 148 ms, faster than 27.61% of C++ online submissions.
 >
-> Memory Usage: 9.2 MB, less than 99.94% of C++ online submissions.
+> Memory Usage: 9.2 MB, less than 99.94% of C++ online submissions.
 
-### Rethinking:
+Or just type 'Not applicable'
